@@ -2,10 +2,17 @@
 const ROOT = document.querySelector('meta[name=root]')?.content ?? '../';
 
 const NAV_HTML = (active) => `
-<!-- ═══ GLOBAL MOBILE OVERFLOW FIX ═══ -->
+<!-- ═══ GLOBAL MOBILE OVERFLOW + TOUCH FIX ═══ -->
 <style>
 html,body{overflow-x:hidden;max-width:100vw}
 *{box-sizing:border-box}
+/* ── Eliminate 300ms tap delay on ALL interactive elements ── */
+a,button,input,select,textarea,label,[onclick],[role="button"],[tabindex]{
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+}
+/* Prevent text-size adjust on orientation change */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 /* ── Topbar ── */
 .idelta-topbar{
   background:linear-gradient(90deg,#2A0F63,#3B1287);
