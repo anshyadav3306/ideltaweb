@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="page" content="register"><meta name="root" content="../">
+<title>Register – iDelta | Learn · Solve · Grow</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="../js/shared.js" defer></script>
+<script src="../js/animations.js" defer></script>
+<style>
+  *{font-family:'Plus Jakarta Sans',sans-serif;box-sizing:border-box;}
+  :root{--brand:#6425D9;--ink:#1B1836;--muted:#5F5B7A;--light:#E6E1F2;}
+  body{background:#f7f4ff;min-height:100vh;}
+  .auth-wrap{min-height:calc(100vh - 72px);display:grid;grid-template-columns:1fr 1fr;}
+  @media(max-width:900px){.auth-wrap{grid-template-columns:1fr;} .auth-left{display:none;}}
+  .auth-left{background:linear-gradient(135deg,#2A0F63 0%,#6425D9 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2.5rem;position:relative;overflow:hidden;}
+  .auth-right{display:flex;align-items:flex-start;justify-content:center;padding:2.5rem 2rem;overflow-y:auto;}
+  .auth-card{background:#fff;border-radius:20px;padding:2.5rem;width:100%;max-width:470px;box-shadow:0 8px 40px rgba(100,37,217,.10);}
+  .inp{width:100%;padding:11px 14px;border:1.5px solid #E6E1F2;border-radius:12px;font-size:.95rem;outline:none;transition:border .2s,box-shadow .2s;font-family:inherit;}
+  .inp:focus{border-color:#6425D9;box-shadow:0 0 0 4px rgba(100,37,217,.10);}
+  .inp-wrap{position:relative;}
+  .inp-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#5F5B7A;}
+  .btn-primary{width:100%;padding:13px;background:linear-gradient(135deg,#6425D9,#8B46FF);color:#fff;font-weight:700;font-size:1rem;border:none;border-radius:12px;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(100,37,217,.35);}
+  .role-toggle{display:flex;background:#f7f4ff;border-radius:14px;padding:5px;gap:5px;}
+  .role-btn{flex:1;padding:12px;border:none;border-radius:10px;font-size:.93rem;font-weight:700;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:7px;}
+  .role-btn.active{color:#fff;box-shadow:0 4px 14px rgba(100,37,217,.35);}
+  .role-btn:not(.active){background:transparent;color:#5F5B7A;}
+  .role-btn.student.active{background:linear-gradient(135deg,#6425D9,#8B46FF);}
+  .role-btn.tutor.active{background:linear-gradient(135deg,#059669,#10b981);}
+  .divider{display:flex;align-items:center;gap:12px;color:#5F5B7A;font-size:.85rem;}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:#E6E1F2;}
+  .social-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:11px;border:1.5px solid #E6E1F2;border-radius:12px;font-size:.93rem;font-weight:600;color:#1B1836;cursor:pointer;transition:all .2s;background:#fff;}
+  .social-btn:hover{border-color:#6425D9;background:#f7f4ff;}
+  .perk{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:12px;background:rgba(255,255,255,.12);backdrop-blur:4px;margin-bottom:12px;}
+  #reg-canvas{position:absolute;inset:0;width:100%;height:100%;}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+
+<div class="auth-wrap">
+  <!-- Left -->
+  <div class="auth-left">
+    <canvas id="reg-canvas"></canvas>
+    <div class="relative z-10 text-white text-center px-2">
+      <div class="text-5xl mb-4 float-anim">🚀</div>
+      <h2 class="text-3xl font-bold mb-2">Join <span style="color:#c4b5fd">iDelta</span> Today</h2>
+      <p class="text-purple-200 mb-7 text-sm max-w-xs mx-auto">India's fastest-growing tutoring platform in Navi Mumbai. Free to join, start learning or teaching in minutes.</p>
+      <div class="space-y-3 text-left">
+        <div class="perk"><span class="text-xl">🎯</span><div><div class="font-semibold text-sm">Personalised Learning</div><div class="text-purple-200 text-xs">Matched to your class & board</div></div></div>
+        <div class="perk"><span class="text-xl">💬</span><div><div class="font-semibold text-sm">Instant Doubt Support</div><div class="text-purple-200 text-xs">Live chat, audio & video sessions</div></div></div>
+        <div class="perk"><span class="text-xl">🏠</span><div><div class="font-semibold text-sm">Home Tuition Matching</div><div class="text-purple-200 text-xs">Verified tutors near your locality</div></div></div>
+        <div class="perk"><span class="text-xl">💰</span><div><div class="font-semibold text-sm">Plans Starting ₹199/mo</div><div class="text-purple-200 text-xs">Affordable for every student</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right -->
+  <div class="auth-right">
+    <div class="auth-card reveal" x-data="{
+      role:'student', showPass:false, step:1, loading:false,
+      form:{name:'',email:'',phone:'',pass:'',board:'',cls:'',subject:''},
+      next(){this.step=2;},back(){this.step=1;}
+    }">
+      <div class="text-center mb-5">
+        <div class="inline-flex items-center gap-2 mb-2">
+          <svg width="26" height="26" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="9" fill="#6425D9"/><path d="M18 8L28 14v8c0 5.52-4.48 10-10 10S8 27.52 8 22v-8l10-6z" fill="white" fill-opacity=".9"/></svg>
+          <span style="color:#6425D9;font-weight:800;font-size:1.25rem;">iDelta</span>
+        </div>
+        <h1 class="text-xl font-bold" style="color:#1B1836">Create your free account</h1>
+        <p class="text-sm mt-1" style="color:#5F5B7A">Already have an account? <a href="login.html" style="color:#6425D9;font-weight:600;">Sign in →</a></p>
+      </div>
+
+      <!-- Role toggle -->
+      <div class="role-toggle mb-5">
+        <button class="role-btn student" :class="{active:role==='student'}" @click="role='student';step=1">🎓 I'm a Student</button>
+        <button class="role-btn tutor" :class="{active:role==='tutor'}" @click="role='tutor';step=1">📚 I'm a Tutor</button>
+      </div>
+
+      <!-- Step indicator -->
+      <div class="flex items-center gap-2 mb-5">
+        <div class="flex items-center gap-1 text-xs" :style="step>=1?'color:#6425D9;font-weight:700':'color:#5F5B7A'">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" :style="step>=1?'background:#6425D9;color:#fff':'background:#E6E1F2;color:#5F5B7A'">1</div>
+          Basic Info
+        </div>
+        <div class="flex-1 h-px" :style="step>=2?'background:#6425D9':'background:#E6E1F2'"></div>
+        <div class="flex items-center gap-1 text-xs" :style="step>=2?'color:#6425D9;font-weight:700':'color:#5F5B7A'">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" :style="step>=2?'background:#6425D9;color:#fff':'background:#E6E1F2;color:#5F5B7A'">2</div>
+          <span x-text="role==='student'?'Preferences':'Teaching Details'"></span>
+        </div>
+      </div>
+
+      <!-- Google -->
+      <button class="social-btn mb-4" x-show="step===1">
+        <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Sign up with Google
+      </button>
+      <div class="divider mb-4" x-show="step===1">or with email</div>
+
+      <!-- Step 1 -->
+      <form x-show="step===1" @submit.prevent="next()" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">First name</label>
+            <input type="text" x-model="form.name" placeholder="Your full name" class="inp" required>
+          </div>
+          <div>
+            <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Last name</label>
+            <input type="text" placeholder="Rai" class="inp" required>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Email address</label>
+          <input type="email" x-model="form.email" placeholder="you@email.com" class="inp" required>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Phone number</label>
+          <div class="flex gap-2">
+            <select class="inp" style="max-width:80px;"><option>+91</option></select>
+            <input type="tel" x-model="form.phone" placeholder="98765 43210" class="inp flex-1" required>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Password</label>
+          <div class="inp-wrap">
+            <input :type="showPass?'text':'password'" x-model="form.pass" placeholder="Min 8 characters" class="inp pr-10" required minlength="8">
+            <span class="inp-eye" @click="showPass=!showPass">
+              <svg x-show="!showPass" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg x-show="showPass" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </span>
+          </div>
+        </div>
+        <label class="flex items-start gap-2 cursor-pointer">
+          <input type="checkbox" required style="accent-color:#6425D9;margin-top:3px">
+          <span class="text-xs" style="color:#5F5B7A">I agree to iDelta's <a href="#" style="color:#6425D9">Terms of Service</a> and <a href="#" style="color:#6425D9">Privacy Policy</a></span>
+        </label>
+        <button type="submit" class="btn-primary">Continue →</button>
+      </form>
+
+      <!-- Step 2 — Student -->
+      <form x-show="step===2 && role==='student'" @submit.prevent="loading=true;setTimeout(()=>loading=false,1500)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Class / Level</label>
+          <select x-model="form.cls" class="inp" required>
+            <option value="">Select your class</option>
+            <option>Class 6</option><option>Class 7</option><option>Class 8</option>
+            <option>Class 9</option><option>Class 10</option><option>Class 11</option>
+            <option>Class 12</option><option>B.Tech / College</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Board</label>
+          <select x-model="form.board" class="inp" required>
+            <option value="">Select your board</option>
+            <option>CBSE</option><option>ICSE</option><option>Maharashtra State Board</option><option>IB</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-2" style="color:#1B1836;">Subjects I need help with</label>
+          <div class="flex flex-wrap gap-2">
+            <template x-for="sub in ['Maths','Science','Physics','Chemistry','English','Biology','Computer Science','History']">
+              <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border cursor-pointer text-sm font-medium transition-all"
+                :style="'border-color:#E6E1F2;color:#5F5B7A'" onchange="this.style.borderColor='#6425D9';this.style.color='#6425D9';this.style.background='#f7f4ff'">
+                <input type="checkbox" class="sr-only" style="accent-color:#6425D9">
+                <span x-text="sub"></span>
+              </label>
+            </template>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Location in Navi Mumbai</label>
+          <select class="inp">
+            <option value="">Select area</option>
+            <option>Vashi</option><option>Nerul</option><option>Kharghar</option><option>Belapur</option>
+            <option>Airoli</option><option>Turbhe</option><option>Panvel</option><option>Ghansoli</option>
+          </select>
+        </div>
+        <div class="flex gap-3">
+          <button type="button" @click="back()" class="flex-1 py-3 rounded-xl border font-semibold text-sm transition-all" style="border-color:#E6E1F2;color:#5F5B7A;" onmouseover="this.style.borderColor='#6425D9'" onmouseout="this.style.borderColor='#E6E1F2'">← Back</button>
+          <button type="submit" class="btn-primary flex-1" :disabled="loading">
+            <span x-show="!loading">Create Account 🎉</span>
+            <span x-show="loading">Creating…</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Step 2 — Tutor -->
+      <form x-show="step===2 && role==='tutor'" @submit.prevent="loading=true;setTimeout(()=>loading=false,1500)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Subjects you teach</label>
+          <input type="text" placeholder="e.g. Maths, Physics, Chemistry" class="inp">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Teaching experience</label>
+          <select class="inp" required>
+            <option value="">Select experience</option>
+            <option>Less than 1 year</option><option>1–2 years</option><option>3–5 years</option>
+            <option>5–10 years</option><option>10+ years</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Teaching mode</label>
+          <div class="flex gap-3">
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium" style="color:#5F5B7A"><input type="checkbox" style="accent-color:#6425D9"> Home Tuition</label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium" style="color:#5F5B7A"><input type="checkbox" style="accent-color:#6425D9"> Online (Live Doubts)</label>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Qualification</label>
+          <input type="text" placeholder="e.g. B.Tech, M.Sc Physics" class="inp">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1" style="color:#1B1836;">Preferred hourly rate</label>
+          <div class="flex items-center gap-2">
+            <span style="color:#5F5B7A;font-weight:600;">₹</span>
+            <input type="number" placeholder="500" min="100" class="inp">
+            <span class="text-sm" style="color:#5F5B7A">/ hour</span>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <button type="button" @click="back()" class="flex-1 py-3 rounded-xl border font-semibold text-sm" style="border-color:#E6E1F2;color:#5F5B7A;">← Back</button>
+          <button type="submit" class="btn-primary flex-1" :disabled="loading">
+            <span x-show="!loading">Apply as Tutor 🎓</span>
+            <span x-show="loading">Submitting…</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+<script>window.addEventListener('load',()=>{if(window.iDeltaAnimations)window.iDeltaAnimations.initParticles('reg-canvas');});</script>
+</body>
+</html>

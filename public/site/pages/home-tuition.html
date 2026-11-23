@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="page" content="Home Tuition"><meta name="root" content="../">
+  <title>Home Tuition – iDelta | Find Verified Home Tutors Navi Mumbai</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{brand:{50:'#F6F2FF',100:'#EDE5FF',200:'#D9C9FF',400:'#A97BFF',500:'#7F46EA',600:'#6425D9',700:'#5018B5',800:'#3B1287',900:'#2A0F63'},ink:'#1B1836',muted:'#5F5B7A',line:'#E6E1F2'},fontFamily:{sans:["'Plus Jakarta Sans'","ui-sans-serif","sans-serif"]}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/animations.js" defer></script>
+  <style>
+    body{font-family:'Plus Jakarta Sans',sans-serif;color:#1B1836}
+    .card-hover{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;will-change:transform}
+    .card-hover:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(100,37,217,.1)}
+    /* Verified badge */
+    .verified-badge{display:inline-flex;align-items:center;gap:3px;background:#EDE5FF;color:#5018B5;font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:50px;white-space:nowrap;vertical-align:middle}
+    /* Heart btn */
+    .heart-btn{padding:.5rem;border-radius:.75rem;border:none;background:transparent;cursor:pointer;transition:background .15s}
+    .heart-btn:hover{background:#FFF1F2}
+    .heart-btn svg{width:20px;height:20px;transition:color .15s,fill .15s}
+    .heart-btn.saved svg{color:#ef4444;fill:#ef4444}
+    .heart-btn:not(.saved) svg{color:#9CA3AF;fill:none}
+  </style>
+</head>
+<body class="bg-white antialiased">
+<div id="site-nav"></div>
+
+<!-- HERO -->
+<section class="bg-gradient-to-br from-brand-50 via-white to-brand-50 py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 bg-brand-100 text-brand-700 text-xs font-bold px-3 py-1.5 rounded-full mb-4">🏠 Home Tuition</div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1B1836] mb-4">Find Verified Home Tutors<br><span class="text-brand-600">Near You</span></h1>
+      <p class="text-[#5F5B7A] text-lg mb-8">Qualified tutors who come to your home in Navi Mumbai. CBSE, ICSE &amp; State Board.</p>
+      <!-- Search -->
+      <div class="bg-white rounded-2xl shadow-lg border border-line p-4 max-w-xl mx-auto">
+        <div class="flex gap-3 flex-col sm:flex-row">
+          <select id="ht-loc" class="flex-1 border border-line rounded-xl px-3 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-300">
+            <option>📍 Navi Mumbai</option><option>Vashi</option><option>Nerul</option><option>Kharghar</option><option>Belapur CBD</option><option>Airoli</option><option>Panvel</option>
+          </select>
+          <select id="ht-class" class="flex-1 border border-line rounded-xl px-3 py-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-300">
+            <option>Select Class</option><option>Class 10</option><option>Class 11</option><option>Class 12</option><option>College</option>
+          </select>
+          <button onclick="htSearch()" class="text-white font-bold px-6 py-3 rounded-xl transition-colors whitespace-nowrap" style="background:#6425D9" onmouseover="this.style.background='#5018B5'" onmouseout="this.style.background='#6425D9'">🔍 Search</button>
+        </div>
+      </div>
+    </div>
+    <!-- Trust Badges -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-w-3xl mx-auto">
+      <div class="bg-white border border-line rounded-2xl p-4 text-center card-hover"><div class="text-2xl mb-1">✅</div><div class="font-bold text-sm text-[#1B1836]">Verified Tutors</div><div class="text-xs text-[#5F5B7A]">ID &amp; credentials checked</div></div>
+      <div class="bg-white border border-line rounded-2xl p-4 text-center card-hover"><div class="text-2xl mb-1">🔍</div><div class="font-bold text-sm text-[#1B1836]">Background Checked</div><div class="text-xs text-[#5F5B7A]">Safe for your family</div></div>
+      <div class="bg-white border border-line rounded-2xl p-4 text-center card-hover"><div class="text-2xl mb-1">📅</div><div class="font-bold text-sm text-[#1B1836]">Flexible Timings</div><div class="text-xs text-[#5F5B7A]">Morning to evening</div></div>
+      <div class="bg-white border border-line rounded-2xl p-4 text-center card-hover"><div class="text-2xl mb-1">🎁</div><div class="font-bold text-sm text-[#1B1836]">Trial Class Free</div><div class="text-xs text-[#5F5B7A]">First class on us</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TUTORS LIST WITH SIDEBAR -->
+<section class="py-10 bg-[#FAF8FF]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-8">
+    <!-- Sidebar -->
+    <aside class="w-60 shrink-0 hidden lg:block">
+      <div class="bg-white border border-line rounded-2xl p-5 sticky top-24">
+        <div class="flex items-center justify-between mb-5">
+          <h3 class="font-bold text-[#1B1836]">Filters</h3>
+          <button onclick="htReset()" class="text-xs font-semibold hover:underline" style="color:#6425D9">Reset</button>
+        </div>
+        <div class="mb-5">
+          <div class="text-xs font-bold text-[#5F5B7A] uppercase tracking-wide mb-2">Area</div>
+          <select id="ht-f-area" class="w-full border border-line rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-300">
+            <option value="">All Areas</option><option>Vashi</option><option>Nerul</option><option>Kharghar</option><option>Belapur</option><option>Airoli</option><option>Panvel</option><option>Seawoods</option>
+          </select>
+        </div>
+        <div class="mb-5">
+          <div class="text-xs font-bold text-[#5F5B7A] uppercase tracking-wide mb-2">Gender Preference</div>
+          <div class="space-y-1.5">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="ht-gender" value="" checked class="accent-brand-600"> <span class="text-sm">Any</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="ht-gender" value="male" class="accent-brand-600"> <span class="text-sm">Male</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="ht-gender" value="female" class="accent-brand-600"> <span class="text-sm">Female</span></label>
+          </div>
+        </div>
+        <div class="mb-5">
+          <div class="text-xs font-bold text-[#5F5B7A] uppercase tracking-wide mb-2">Monthly Fee</div>
+          <input type="range" id="ht-f-fee" min="500" max="5000" step="100" value="5000" class="w-full" style="accent-color:#6425D9" oninput="document.getElementById('ht-fee-val').textContent=this.value">
+          <div class="flex justify-between text-xs text-[#5F5B7A] mt-1"><span>₹500</span><span class="font-bold" style="color:#6425D9">₹<span id="ht-fee-val">5000</span></span></div>
+        </div>
+        <div class="mb-5">
+          <div class="text-xs font-bold text-[#5F5B7A] uppercase tracking-wide mb-2">Board</div>
+          <div class="space-y-1.5">
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="ht-cbse" class="accent-brand-600 rounded"> <span class="text-sm">CBSE</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="ht-icse" class="accent-brand-600 rounded"> <span class="text-sm">ICSE</span></label>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="ht-state" class="accent-brand-600 rounded"> <span class="text-sm">State Board</span></label>
+          </div>
+        </div>
+        <!-- APPLY & SEARCH -->
+        <div class="border-t border-line pt-4">
+          <button onclick="htApplyFilters()" class="w-full text-white font-bold py-2.5 rounded-xl text-sm flex items-center justify-center gap-2" style="background:#6425D9" onmouseover="this.style.background='#5018B5'" onmouseout="this.style.background='#6425D9'">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            Apply &amp; Search
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Tutor Cards -->
+    <div class="flex-1">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-[#1B1836]">Home Tutors <span id="ht-count" class="text-[#5F5B7A] font-normal">(6 found)</span></h2>
+        <select id="ht-sort" onchange="htSort(this.value)" class="border border-line rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-300">
+          <option value="rating">Rating (High to Low)</option>
+          <option value="fee-asc">Fee (Low to High)</option>
+          <option value="fee-desc">Fee (High to Low)</option>
+          <option value="exp">Experience</option>
+        </select>
+      </div>
+      <div id="ht-cards" class="space-y-4"></div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+
+<script>
+var htData = [
+  {name:'Prof. Rohan Kulkarni',subjects:'Maths, Physics',classes:'Class 10, 11, 12',loc:'Belapur',exp:5,rating:4.0,reviews:200,fee:1200,board:'CBSE, ICSE',gender:'male',init:'R',online:true,  color:'linear-gradient(135deg,#f59e0b,#ea580c)'},
+  {name:'Ms. Pooja Singh',      subjects:'Maths, English',  classes:'Class 1–8',      loc:'Belapur',exp:4,rating:4.8,reviews:287,fee:1000,board:'State Board', gender:'female',init:'P',online:true,  color:'linear-gradient(135deg,#3b82f6,#4f46e5)'},
+  {name:'Mr. Aakash Tiwari',   subjects:'Science, Biology',classes:'Class 8–10',     loc:'Kharghar',exp:6,rating:4.7,reviews:342,fee:1500,board:'CBSE',       gender:'male',init:'A',online:false, color:'linear-gradient(135deg,#10b981,#059669)'},
+  {name:'Dr. Meena Joshi',     subjects:'Chemistry, Bio',  classes:'Class 11, 12',   loc:'Vashi',   exp:9,rating:4.9,reviews:510,fee:2000,board:'CBSE, ICSE', gender:'female',init:'M',online:true,  color:'linear-gradient(135deg,#8b5cf6,#6425D9)'},
+  {name:'Mr. Rahul Deshmukh',  subjects:'Physics, Maths',  classes:'Class 11, 12',   loc:'Nerul',   exp:7,rating:4.6,reviews:198,fee:1800,board:'CBSE',       gender:'male',init:'R',online:false, color:'linear-gradient(135deg,#ec4899,#e11d48)'},
+  {name:'Ms. Anjali Rao',      subjects:'English, SST',    classes:'Class 6–10',     loc:'Panvel',  exp:3,rating:4.5,reviews:155,fee:900, board:'State Board', gender:'female',init:'A',online:true,  color:'linear-gradient(135deg,#14b8a6,#0891b2)'}
+];
+var htCurrent = htData.slice();
+var htSaved = {};
+
+var VERIFIED_BADGE = '<span class="verified-badge"><svg width="11" height="11" fill="#5018B5" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>Verified</span>';
+
+function htCard(t, i) {
+  var sid = 'saved-ht-'+i;
+  var saved = !!htSaved[t.name];
+  var heartStyle = saved ? 'color:#ef4444;fill:#ef4444' : 'color:#9CA3AF;fill:none';
+  var heartHover = saved ? 'this.style.background=\'#FFF1F2\'' : 'this.style.background=\'#FFF1F2\'';
+  return '<div class="bg-white border border-line rounded-2xl p-5 card-hover">'
+    + '<div class="flex gap-4">'
+    +   '<div style="width:64px;height:64px;border-radius:.75rem;background:'+t.color+';display:flex;align-items:center;justify-content:center;color:white;font-size:1.25rem;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.12);flex-shrink:0">'+t.init+'</div>'
+    +   '<div class="flex-1 min-w-0">'
+    +     '<div class="flex items-start justify-between gap-2">'
+    +       '<div>'
+    +         '<div class="flex items-center gap-2 flex-wrap">'
+    +           '<h3 class="font-bold text-[#1B1836]">'+t.name+'</h3>'
+    +           VERIFIED_BADGE
+    +           '<span class="text-xs font-semibold px-2.5 py-0.5 rounded-full" style="background:#FFF7ED;color:#C2410C">Home Tuition</span>'
+    +         '</div>'
+    +         '<p class="text-sm text-[#5F5B7A] mt-0.5">'+t.subjects+' · '+t.classes+'</p>'
+    +         '<div class="flex items-center gap-3 mt-2 flex-wrap">'
+    +           '<span class="flex items-center gap-1 text-sm"><span style="color:#F5B301">★</span><span class="font-bold">'+t.rating.toFixed(1)+'</span><span class="text-[#5F5B7A] text-xs">('+t.reviews+')</span></span>'
+    +           '<span class="text-xs text-[#5F5B7A]">📍 '+t.loc+', Navi Mumbai</span>'
+    +           '<span class="text-xs text-[#5F5B7A]">🎓 '+t.board+'</span>'
+    +           (t.online ? '<span class="text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1" style="color:#16a34a;background:#f0fdf4"><span style="width:6px;height:6px;background:#22c55e;border-radius:50%;display:inline-block"></span>Active</span>' : '')
+    +         '</div>'
+    +       '</div>'
+    +       '<button class="heart-btn'+(saved?' saved':'')+'" id="'+sid+'" onclick="htToggleSave(\''+t.name+'\',\''+sid+'\')">'
+    +         '<svg stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="'+heartStyle+'"><path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>'
+    +       '</button>'
+    +     '</div>'
+    +     '<div class="flex items-center justify-between mt-4 pt-3 border-t border-line">'
+    +       '<div><span class="text-xl font-extrabold">₹'+t.fee.toLocaleString()+'</span><span class="text-sm text-[#5F5B7A]">/month</span><div class="text-xs text-[#5F5B7A] mt-0.5">'+t.exp+'+ years exp.</div></div>'
+    +       '<a href="tutor-profile.html" class="text-white font-bold px-5 py-2.5 rounded-xl text-sm" style="background:#6425D9;text-decoration:none" onmouseover="this.style.background=\'#5018B5\'" onmouseout="this.style.background=\'#6425D9\'">View Profile →</a>'
+    +     '</div>'
+    +   '</div>'
+    + '</div>'
+    + '</div>';
+}
+
+function htToggleSave(name, sid) {
+  htSaved[name] = !htSaved[name];
+  var btn = document.getElementById(sid);
+  if (!btn) return;
+  var saved = htSaved[name];
+  btn.classList.toggle('saved', saved);
+  var svg = btn.querySelector('svg');
+  if (svg) { svg.style.color = saved ? '#ef4444' : '#9CA3AF'; svg.style.fill = saved ? '#ef4444' : 'none'; }
+  btn.style.background = saved ? '#FFF1F2' : '';
+  setTimeout(function(){ btn.style.background = ''; }, 150);
+}
+
+function htRender(list) {
+  var el = document.getElementById('ht-cards');
+  var cnt = document.getElementById('ht-count');
+  if (el) el.innerHTML = list.length ? list.map(function(t,i){return htCard(t,i);}).join('') : '<div class="text-center py-16 text-[#5F5B7A]"><div class="text-4xl mb-3">🔍</div><p class="font-semibold">No tutors match your filters.</p></div>';
+  if (cnt) cnt.textContent = '('+list.length+' found)';
+}
+
+function htSort(by) {
+  htCurrent.sort(function(a,b){
+    if(by==='rating')   return b.rating - a.rating;
+    if(by==='fee-asc')  return a.fee - b.fee;
+    if(by==='fee-desc') return b.fee - a.fee;
+    if(by==='exp')      return b.exp - a.exp;
+    return 0;
+  });
+  htRender(htCurrent);
+}
+
+function htApplyFilters() {
+  var area = document.getElementById('ht-f-area').value;
+  var maxFee = parseInt(document.getElementById('ht-f-fee').value);
+  var gender = document.querySelector('input[name="ht-gender"]:checked')?.value || '';
+  var boards = [];
+  if(document.getElementById('ht-cbse').checked) boards.push('CBSE');
+  if(document.getElementById('ht-icse').checked) boards.push('ICSE');
+  if(document.getElementById('ht-state').checked) boards.push('State Board');
+
+  htCurrent = htData.filter(function(t){
+    if(area && !t.loc.toLowerCase().includes(area.toLowerCase())) return false;
+    if(gender && t.gender !== gender) return false;
+    if(t.fee > maxFee) return false;
+    if(boards.length && !boards.some(function(b){ return t.board.includes(b); })) return false;
+    return true;
+  });
+  htSort(document.getElementById('ht-sort').value);
+}
+
+function htReset() {
+  document.getElementById('ht-f-area').value = '';
+  document.getElementById('ht-f-fee').value = 5000;
+  document.getElementById('ht-fee-val').textContent = '5000';
+  document.querySelector('input[name="ht-gender"][value=""]').checked = true;
+  ['ht-cbse','ht-icse','ht-state'].forEach(function(id){ document.getElementById(id).checked = false; });
+  htCurrent = htData.slice();
+  htRender(htCurrent);
+}
+
+function htSearch() {
+  htApplyFilters();
+}
+
+document.addEventListener('DOMContentLoaded', function(){ htRender(htCurrent); });
+</script>
+</body>
+</html>

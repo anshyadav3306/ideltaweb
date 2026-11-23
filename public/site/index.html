@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>iDelta – Find the Right Tutor, Get Home Tuition & Solve Doubts | Navi Mumbai</title>
+  <meta name="description" content="iDelta – Verified home tutors, live doubt sessions & expert mentorship in Navi Mumbai.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{brand:{50:'#F6F2FF',100:'#EDE5FF',200:'#D9C9FF',300:'#C4ACFF',400:'#A97BFF',500:'#7F46EA',600:'#6425D9',700:'#5018B5',800:'#3B1287',900:'#2A0F63'},ink:'#1B1836',muted:'#5F5B7A',line:'#E6E1F2'},fontFamily:{sans:["'Plus Jakarta Sans'","ui-sans-serif","sans-serif"]}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Three.js for 3D -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <!-- GSAP for smooth animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <style>
+    *{box-sizing:border-box}
+    body{font-family:'Plus Jakarta Sans',sans-serif;color:#1B1836;overflow-x:hidden}
+    [x-cloak]{display:none!important}
+
+    /* ── 3D Canvas ── */
+    #hero-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+    /* ── Hero gradient bg ── */
+    .hero-bg{background:linear-gradient(135deg,#FAF8FF 0%,#EDE5FF 50%,#F6F2FF 100%);position:relative;overflow:hidden}
+
+    /* ── Animated mesh gradient ── */
+    .mesh-gradient{position:absolute;inset:0;pointer-events:none;z-index:0;
+      background:radial-gradient(ellipse 60% 50% at 20% 50%,rgba(127,70,234,0.12) 0%,transparent 70%),
+                 radial-gradient(ellipse 50% 60% at 80% 30%,rgba(100,37,217,0.10) 0%,transparent 70%),
+                 radial-gradient(ellipse 40% 40% at 60% 80%,rgba(217,201,255,0.5) 0%,transparent 60%);
+      animation:meshShift 8s ease-in-out infinite alternate}
+    @keyframes meshShift{
+      0%{background:radial-gradient(ellipse 60% 50% at 20% 50%,rgba(127,70,234,0.12) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 80% 30%,rgba(100,37,217,0.10) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 60% 80%,rgba(217,201,255,0.5) 0%,transparent 60%)}
+      100%{background:radial-gradient(ellipse 60% 50% at 70% 50%,rgba(127,70,234,0.15) 0%,transparent 70%),radial-gradient(ellipse 50% 60% at 20% 60%,rgba(100,37,217,0.12) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 40% 20%,rgba(217,201,255,0.6) 0%,transparent 60%)}}
+
+    /* ── Floating cards ── */
+    .float-card{animation:float 6s ease-in-out infinite;transform-style:preserve-3d}
+    .float-card:nth-child(2){animation-delay:-2s}
+    .float-card:nth-child(3){animation-delay:-4s}
+    .float-card:nth-child(4){animation-delay:-1s}
+    @keyframes float{0%,100%{transform:translateY(0) rotateX(2deg) rotateY(-2deg)}50%{transform:translateY(-12px) rotateX(-2deg) rotateY(2deg)}}
+
+    /* ── 3D card tilt ── */
+    .tilt-card{transform-style:preserve-3d;transition:transform .15s ease}
+
+    /* ── Scroll reveal ── */
+    .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.visible{opacity:1;transform:none}
+    .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .8s ease,transform .8s ease}
+    .reveal-left.visible{opacity:1;transform:none}
+    .reveal-right{opacity:0;transform:translateX(40px);transition:opacity .8s ease,transform .8s ease}
+    .reveal-right.visible{opacity:1;transform:none}
+    .reveal-scale{opacity:0;transform:scale(0.88);transition:opacity .6s ease,transform .6s ease}
+    .reveal-scale.visible{opacity:1;transform:scale(1)}
+
+    /* ── Stagger children ── */
+    .stagger > *{opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease}
+    .stagger.visible > *:nth-child(1){opacity:1;transform:none;transition-delay:.05s}
+    .stagger.visible > *:nth-child(2){opacity:1;transform:none;transition-delay:.15s}
+    .stagger.visible > *:nth-child(3){opacity:1;transform:none;transition-delay:.25s}
+    .stagger.visible > *:nth-child(4){opacity:1;transform:none;transition-delay:.35s}
+    .stagger.visible > *:nth-child(5){opacity:1;transform:none;transition-delay:.45s}
+    .stagger.visible > *:nth-child(6){opacity:1;transform:none;transition-delay:.55s}
+    .stagger.visible > *:nth-child(7){opacity:1;transform:none;transition-delay:.65s}
+    .stagger.visible > *:nth-child(8){opacity:1;transform:none;transition-delay:.75s}
+    .stagger.visible > *:nth-child(9){opacity:1;transform:none;transition-delay:.85s}
+    .stagger.visible > *:nth-child(10){opacity:1;transform:none;transition-delay:.95s}
+
+    /* ── Gradient text ── */
+    .gradient-text{background:linear-gradient(135deg,#6425D9,#A97BFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+    /* ── Animated counter ── */
+    .counter{display:inline-block}
+
+    /* ── Glowing button ── */
+    .btn-glow{background:linear-gradient(135deg,#7F46EA,#6425D9);box-shadow:0 4px 20px rgba(100,37,217,0.4);transition:transform .2s ease,box-shadow .2s ease}
+    .btn-glow:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(100,37,217,0.55)}
+
+    /* ── 3D subject card ── */
+    .subject-card{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;transform-style:preserve-3d;cursor:pointer;will-change:transform}
+    .subject-card:hover{transform:translateY(-8px) rotateX(5deg) scale(1.03);box-shadow:0 24px 48px rgba(100,37,217,0.18)}
+
+    /* ── Shimmer skeleton ── */
+    @keyframes shimmer{0%{background-position:-1000px 0}100%{background-position:1000px 0}}
+
+    /* ── Orbiting particles ── */
+    .orbit-container{position:relative;width:400px;height:400px}
+    .orbit-ring{position:absolute;top:50%;left:50%;border-radius:50%;border:1px dashed rgba(100,37,217,0.2);transform:translate(-50%,-50%);animation:spin 20s linear infinite}
+    .orbit-ring:nth-child(2){animation-duration:15s;animation-direction:reverse}
+    .orbit-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#7F46EA,#A97BFF);top:-5px;left:calc(50% - 5px);box-shadow:0 0 12px rgba(127,70,234,0.6)}
+    @keyframes spin{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+    /* ── Gradient brand bg ── */
+    .gradient-brand{background:linear-gradient(135deg,#6425D9 0%,#3B1287 100%)}
+
+    /* ── Typewriter cursor ── */
+    .cursor{display:inline-block;width:3px;height:1em;background:#6425D9;margin-left:2px;animation:blink-cursor .7s step-end infinite;vertical-align:middle}
+    @keyframes blink-cursor{0%,100%{opacity:1}50%{opacity:0}}
+
+    /* ── Noise texture ── */
+    .noise::after{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;opacity:.4}
+
+    /* ── Scroll indicator ── */
+    .scroll-indicator{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;animation:bounce 2s ease infinite}
+    @keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+    /* ── Pulse ring ── */
+    .pulse-ring::before{content:'';position:absolute;inset:-8px;border-radius:inherit;border:2px solid rgba(100,37,217,0.3);animation:pulse-anim 2s ease-out infinite}
+    @keyframes pulse-anim{0%{transform:scale(1);opacity:1}100%{transform:scale(1.3);opacity:0}}
+
+    .card-3d{transition:transform .18s ease,box-shadow .18s ease;transform-style:preserve-3d;will-change:transform}
+    .card-3d:hover{transform:translateY(-6px) rotateX(4deg);box-shadow:0 20px 48px rgba(100,37,217,0.14)}
+
+    /* Testimonial glow */
+    .testimonial-card{transition:transform .18s ease,box-shadow .18s ease}
+    .testimonial-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(100,37,217,0.12)}
+
+    /* Stats counter glow */
+    .stat-num{background:linear-gradient(135deg,#6425D9,#A97BFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  </style>
+</head>
+<body class="bg-white antialiased" x-data>
+
+<!-- NAV (injected by shared.js) -->
+<div id="site-nav"></div>
+
+<!-- ════════════════════════════════════════
+     HERO — 3D SCENE
+════════════════════════════════════════ -->
+<section class="hero-bg relative min-h-[92vh] flex items-center" style="padding:5rem 0 4rem">
+  <canvas id="hero-canvas"></canvas>
+  <div class="mesh-gradient"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+      <!-- LEFT TEXT -->
+      <div>
+        <div class="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-brand-200 text-brand-700 text-sm font-semibold px-4 py-2 rounded-full mb-6 shadow-sm reveal">
+          <span class="w-2 h-2 bg-brand-500 rounded-full animate-pulse"></span>
+          Your Complete Learning Partner
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-[3.3rem] font-extrabold leading-tight text-[#1B1836] mb-6 reveal" style="transition-delay:.1s">
+          Find the Right Tutor,<br>
+          Get Home Tuition,<br>
+          &amp; Solve <span class="gradient-text" id="typed-text">Doubts Instantly.</span>
+        </h1>
+
+        <p class="text-lg text-[#5F5B7A] mb-8 leading-relaxed max-w-lg reveal" style="transition-delay:.2s">
+          Discover experienced tutors near you, book home tuition, or connect instantly for live doubt-solving sessions.
+        </p>
+
+        <div class="flex flex-wrap gap-4 mb-8 reveal" style="transition-delay:.3s">
+          <a href="pages/tutors.html" class="btn-glow inline-flex items-center gap-2 text-white font-bold px-7 py-4 rounded-xl">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            Find a Tutor
+          </a>
+          <a href="pages/live-doubts.html" class="inline-flex items-center gap-2 border-2 border-brand-600 text-brand-600 hover:bg-brand-50 font-bold px-7 py-4 rounded-xl transition-all bg-white/60 backdrop-blur-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.07A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            Solve a Doubt Live
+          </a>
+        </div>
+
+        <!-- Social proof -->
+        <div class="flex items-center gap-3 reveal" style="transition-delay:.4s">
+          <div class="flex -space-x-2">
+            <div class="w-9 h-9 rounded-full border-2 border-white bg-brand-600 flex items-center justify-center text-white text-xs font-bold shadow-md">A</div>
+            <div class="w-9 h-9 rounded-full border-2 border-white bg-brand-500 flex items-center justify-center text-white text-xs font-bold shadow-md">S</div>
+            <div class="w-9 h-9 rounded-full border-2 border-white bg-purple-600 flex items-center justify-center text-white text-xs font-bold shadow-md">P</div>
+            <div class="w-9 h-9 rounded-full border-2 border-white bg-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-md">R</div>
+            <div class="w-9 h-9 rounded-full border-2 border-white bg-violet-600 flex items-center justify-center text-white text-xs font-bold shadow-md">M</div>
+          </div>
+          <p class="text-sm text-[#5F5B7A]">
+            <span class="font-bold text-[#1B1836]">Trusted by 10,000+</span> Students &amp; Parents in Navi Mumbai
+          </p>
+        </div>
+      </div>
+
+      <!-- RIGHT — Orbiting 3D scene with floating cards -->
+      <div class="hidden lg:flex items-center justify-center relative" style="height:480px">
+        <!-- Orbit rings -->
+        <div class="orbit-container absolute" style="top:50%;left:50%;transform:translate(-50%,-50%)">
+          <div class="orbit-ring" style="width:300px;height:300px">
+            <div class="orbit-dot" style="background:linear-gradient(135deg,#F5B301,#FCD34D)"></div>
+          </div>
+          <div class="orbit-ring" style="width:200px;height:200px">
+            <div class="orbit-dot"></div>
+          </div>
+          <div class="orbit-ring" style="width:380px;height:380px;animation-duration:30s">
+            <div class="orbit-dot" style="background:linear-gradient(135deg,#4ade80,#22d3ee);top:auto;bottom:-5px;left:calc(50% - 5px)"></div>
+          </div>
+        </div>
+
+        <!-- Center 3D logo orb -->
+        <div class="relative z-10" style="transform-style:preserve-3d">
+          <div class="w-36 h-36 rounded-3xl flex items-center justify-center shadow-2xl pulse-ring relative" style="background:linear-gradient(135deg,#7F46EA,#5018B5);box-shadow:0 20px 60px rgba(100,37,217,0.5);animation:float 4s ease-in-out infinite">
+            <svg style="width:70px;height:70px" fill="white" viewBox="0 0 20 20"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zm5.99 7.176A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/></svg>
+          </div>
+        </div>
+
+        <!-- Floating feature cards -->
+        <div class="float-card absolute bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl border border-brand-100" style="top:5%;left:0;min-width:170px">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-orange-100 rounded-xl flex items-center justify-center text-lg">🏠</div>
+            <div><div class="font-bold text-xs text-[#1B1836]">Home Tuition</div><div class="text-[10px] text-[#5F5B7A]">Verified tutors near you</div></div>
+          </div>
+        </div>
+
+        <div class="float-card absolute bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl border border-brand-100" style="top:5%;right:0;min-width:170px;animation-delay:-3s">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-blue-100 rounded-xl flex items-center justify-center text-lg">🎥</div>
+            <div><div class="font-bold text-xs text-[#1B1836]">Live Doubt Session</div><div class="text-[10px] text-[#5F5B7A]">Expert help instantly</div></div>
+          </div>
+        </div>
+
+        <div class="float-card absolute bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl border border-brand-100" style="bottom:12%;left:0;min-width:170px;animation-delay:-5s">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-brand-100 rounded-xl flex items-center justify-center text-lg">📚</div>
+            <div><div class="font-bold text-xs text-[#1B1836]">All Classes</div><div class="text-[10px] text-[#5F5B7A]">Class 1–12 &amp; College</div></div>
+          </div>
+        </div>
+
+        <div class="float-card absolute bg-white/90 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl border border-brand-100" style="bottom:12%;right:0;min-width:170px;animation-delay:-1.5s">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-green-100 rounded-xl flex items-center justify-center text-lg">📊</div>
+            <div><div class="font-bold text-xs text-[#1B1836]">Popular Subjects</div><div class="text-[10px] text-[#5F5B7A]">Maths, Science &amp; more</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="scroll-indicator text-brand-400">
+    <span class="text-xs font-semibold text-[#5F5B7A]">Scroll</span>
+    <svg class="w-5 h-5" fill="none" stroke="#6425D9" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     STATS BAR — animated counters
+════════════════════════════════════════ -->
+<section class="bg-white py-10 border-y border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 stagger" id="stats-row">
+      <div class="flex items-center gap-4 p-4 card-3d rounded-2xl hover:bg-brand-50 transition-colors">
+        <div class="w-13 h-13 bg-brand-100 rounded-2xl flex items-center justify-center shrink-0 p-3">
+          <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <div>
+          <div class="text-2xl font-extrabold stat-num" data-target="500">0</div>
+          <div class="text-sm font-semibold text-[#1B1836]">Verified Tutors</div>
+          <div class="text-xs text-[#5F5B7A]">Qualified &amp; experienced</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 p-4 card-3d rounded-2xl hover:bg-yellow-50 transition-colors">
+        <div class="w-13 h-13 bg-yellow-100 rounded-2xl flex items-center justify-center shrink-0 p-3">
+          <svg class="w-7 h-7 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div>
+          <div class="text-2xl font-extrabold" style="background:linear-gradient(135deg,#D97706,#F59E0B);-webkit-background-clip:text;-webkit-text-fill-color:transparent">24/7</div>
+          <div class="text-sm font-semibold text-[#1B1836]">Instant Doubt Solving</div>
+          <div class="text-xs text-[#5F5B7A]">Connect &amp; get answers live</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 p-4 card-3d rounded-2xl hover:bg-green-50 transition-colors">
+        <div class="w-13 h-13 bg-green-100 rounded-2xl flex items-center justify-center shrink-0 p-3">
+          <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <div>
+          <div class="text-2xl font-extrabold" style="background:linear-gradient(135deg,#059669,#34D399);-webkit-background-clip:text;-webkit-text-fill-color:transparent"><span data-target="10000">0</span>+</div>
+          <div class="text-sm font-semibold text-[#1B1836]">Students Served</div>
+          <div class="text-xs text-[#5F5B7A]">Across Navi Mumbai</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4 p-4 card-3d rounded-2xl hover:bg-blue-50 transition-colors">
+        <div class="w-13 h-13 bg-blue-100 rounded-2xl flex items-center justify-center shrink-0 p-3">
+          <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        </div>
+        <div>
+          <div class="text-2xl font-extrabold" style="background:linear-gradient(135deg,#2563EB,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent"><span data-target="25000">0</span>+</div>
+          <div class="text-sm font-semibold text-[#1B1836]">Sessions Completed</div>
+          <div class="text-xs text-[#5F5B7A]">Home &amp; online</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     HOW IT WORKS
+════════════════════════════════════════ -->
+<section class="py-20 bg-white overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+    <div class="reveal">
+      <div class="inline-block bg-brand-50 text-brand-700 text-xs font-bold px-4 py-2 rounded-full mb-4 border border-brand-200">How It Works</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1B1836] mb-3">How iDelta Works?</h2>
+      <p class="text-[#5F5B7A] mb-14 max-w-xl mx-auto">Get started in 4 simple steps and begin your learning journey today.</p>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 relative stagger" id="steps-row">
+      <div class="hidden lg:block absolute top-10 left-[12%] right-[12%] h-px" style="background:linear-gradient(90deg,transparent,#C4ACFF 20%,#6425D9 50%,#C4ACFF 80%,transparent);z-index:0"></div>
+      <div class="relative z-10 flex flex-col items-center text-center group">
+        <div class="w-20 h-20 rounded-2xl flex items-center justify-center mb-5 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-3" style="background:linear-gradient(135deg,#7F46EA,#5018B5);box-shadow:0 8px 24px rgba(100,37,217,0.3)">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+        <div class="text-xs font-bold text-brand-500 uppercase tracking-widest mb-2">Step 1</div>
+        <h3 class="font-bold text-lg text-[#1B1836] mb-2">Search</h3>
+        <p class="text-sm text-[#5F5B7A]">Find a tutor or choose a live doubt session</p>
+      </div>
+      <div class="relative z-10 flex flex-col items-center text-center group">
+        <div class="w-20 h-20 rounded-2xl flex items-center justify-center mb-5 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-3" style="background:linear-gradient(135deg,#7F46EA,#5018B5);box-shadow:0 8px 24px rgba(100,37,217,0.3)">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        </div>
+        <div class="text-xs font-bold text-brand-500 uppercase tracking-widest mb-2">Step 2</div>
+        <h3 class="font-bold text-lg text-[#1B1836] mb-2">Connect</h3>
+        <p class="text-sm text-[#5F5B7A]">View profile, check availability and book</p>
+      </div>
+      <div class="relative z-10 flex flex-col items-center text-center group">
+        <div class="w-20 h-20 rounded-2xl flex items-center justify-center mb-5 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-3" style="background:linear-gradient(135deg,#7F46EA,#5018B5);box-shadow:0 8px 24px rgba(100,37,217,0.3)">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.07A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        </div>
+        <div class="text-xs font-bold text-brand-500 uppercase tracking-widest mb-2">Step 3</div>
+        <h3 class="font-bold text-lg text-[#1B1836] mb-2">Learn</h3>
+        <p class="text-sm text-[#5F5B7A]">Attend home classes or solve doubts instantly</p>
+      </div>
+      <div class="relative z-10 flex flex-col items-center text-center group">
+        <div class="w-20 h-20 rounded-2xl flex items-center justify-center mb-5 shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:rotate-3" style="background:linear-gradient(135deg,#7F46EA,#5018B5);box-shadow:0 8px 24px rgba(100,37,217,0.3)">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        </div>
+        <div class="text-xs font-bold text-brand-500 uppercase tracking-widest mb-2">Step 4</div>
+        <h3 class="font-bold text-lg text-[#1B1836] mb-2">Grow</h3>
+        <p class="text-sm text-[#5F5B7A]">Build a strong understanding and boost your scores</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     POPULAR SUBJECTS — 3D card grid
+════════════════════════════════════════ -->
+<section class="py-20" style="background:linear-gradient(180deg,#FAF8FF 0%,#ffffff 100%)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12 reveal">
+      <div class="inline-block bg-brand-50 text-brand-700 text-xs font-bold px-4 py-2 rounded-full mb-4 border border-brand-200">Browse Subjects</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1B1836] mb-3">Popular Subjects</h2>
+      <p class="text-[#5F5B7A] max-w-xl mx-auto">Find expert tutors for every subject across all classes and streams.</p>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 stagger" id="subjects-grid">
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3 transition-transform duration-300 group-hover:scale-125">➕</div>
+        <div class="font-bold text-sm text-[#1B1836]">Mathematics</div><div class="text-xs text-[#5F5B7A] mt-1">120+ Tutors</div>
+      </a>
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3">🔬</div><div class="font-bold text-sm text-[#1B1836]">Science</div><div class="text-xs text-[#5F5B7A] mt-1">95+ Tutors</div>
+      </a>
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3">📖</div><div class="font-bold text-sm text-[#1B1836]">English</div><div class="text-xs text-[#5F5B7A] mt-1">80+ Tutors</div>
+      </a>
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3">⚛️</div><div class="font-bold text-sm text-[#1B1836]">Physics</div><div class="text-xs text-[#5F5B7A] mt-1">75+ Tutors</div>
+      </a>
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3">🧪</div><div class="font-bold text-sm text-[#1B1836]">Chemistry</div><div class="text-xs text-[#5F5B7A] mt-1">70+ Tutors</div>
+      </a>
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3">🧬</div><div class="font-bold text-sm text-[#1B1836]">Biology</div><div class="text-xs text-[#5F5B7A] mt-1">60+ Tutors</div>
+      </a>
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3">💻</div><div class="font-bold text-sm text-[#1B1836]">Computer Sc.</div><div class="text-xs text-[#5F5B7A] mt-1">55+ Tutors</div>
+      </a>
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3">📜</div><div class="font-bold text-sm text-[#1B1836]">History</div><div class="text-xs text-[#5F5B7A] mt-1">40+ Tutors</div>
+      </a>
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3">📈</div><div class="font-bold text-sm text-[#1B1836]">Economics</div><div class="text-xs text-[#5F5B7A] mt-1">45+ Tutors</div>
+      </a>
+      <a href="pages/subjects.html" class="subject-card bg-white rounded-2xl p-5 text-center border border-line" style="text-decoration:none">
+        <div class="text-4xl mb-3">🏦</div><div class="font-bold text-sm text-[#1B1836]">Accountancy</div><div class="text-xs text-[#5F5B7A] mt-1">38+ Tutors</div>
+      </a>
+    </div>
+    <div class="text-center mt-10 reveal">
+      <a href="pages/subjects.html" class="inline-flex items-center gap-2 border-2 border-brand-600 text-brand-600 font-bold px-6 py-3 rounded-xl hover:bg-brand-50 transition-all hover:shadow-lg hover:shadow-brand-100">
+        View All Subjects <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     WHY IDELTA — 3D feature cards
+════════════════════════════════════════ -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-14 reveal">
+      <div class="inline-block bg-brand-50 text-brand-700 text-xs font-bold px-4 py-2 rounded-full mb-4 border border-brand-200">Why iDelta</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1B1836] mb-3">Why Choose iDelta?</h2>
+      <p class="text-[#5F5B7A] max-w-xl mx-auto">We're committed to making quality education accessible for every student.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="reveal-left bg-[#FAF8FF] rounded-3xl p-8 border border-line card-3d">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg" style="background:linear-gradient(135deg,#7F46EA,#5018B5);box-shadow:0 8px 20px rgba(100,37,217,0.3)">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-[#1B1836] mb-3">Verified Tutors</h3>
+        <p class="text-[#5F5B7A] mb-5">Every tutor is background-verified, credential-checked, and reviewed by our team before listing.</p>
+        <ul class="space-y-2 text-sm text-[#5F5B7A]">
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> ID &amp; qualification verified</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Student reviews &amp; ratings</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Demo class before commitment</li>
+        </ul>
+      </div>
+      <div class="reveal rounded-3xl p-8 card-3d text-white relative overflow-hidden" style="background:linear-gradient(135deg,#6425D9,#3B1287)">
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full"></div>
+        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-white/5 rounded-full"></div>
+        <div class="w-14 h-14 bg-white/15 rounded-2xl flex items-center justify-center mb-6 relative z-10">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-white mb-3 relative z-10">Instant Doubt Solving</h3>
+        <p class="text-brand-100 mb-5 relative z-10">Connect with subject experts in under 2 minutes via video, audio, or chat. No waiting needed.</p>
+        <ul class="space-y-2 text-sm text-brand-100 relative z-10">
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-white shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> 24 experts online right now</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-white shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Sessions from ₹149</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-white shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Video, audio &amp; chat options</li>
+        </ul>
+      </div>
+      <div class="reveal-right bg-[#FAF8FF] rounded-3xl p-8 border border-line card-3d">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg" style="background:linear-gradient(135deg,#7F46EA,#5018B5);box-shadow:0 8px 20px rgba(100,37,217,0.3)">
+          <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </div>
+        <h3 class="text-xl font-bold text-[#1B1836] mb-3">Expert Mentorship</h3>
+        <p class="text-[#5F5B7A] mb-5">Get personalized study plans, track your progress, and receive consistent guidance.</p>
+        <ul class="space-y-2 text-sm text-[#5F5B7A]">
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Personalized study plan</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Progress tracking dashboard</li>
+          <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Study material &amp; tests</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════════ -->
+<section class="py-20" style="background:linear-gradient(180deg,#F6F2FF 0%,#ffffff 100%)">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12 reveal">
+      <div class="inline-block bg-brand-50 text-brand-700 text-xs font-bold px-4 py-2 rounded-full mb-4 border border-brand-200">Student Reviews</div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-[#1B1836] mb-3">What Students Say</h2>
+      <p class="text-[#5F5B7A] max-w-xl mx-auto">Real results from real students across Navi Mumbai.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 stagger" id="testimonials-row">
+      <div class="bg-white rounded-2xl p-7 border border-line testimonial-card">
+        <div class="flex gap-1 mb-4 text-xl">⭐⭐⭐⭐⭐</div>
+        <p class="text-[#1B1836] text-sm leading-relaxed mb-5 italic">"I was struggling with Maths in Class 10. iDelta connected me with a brilliant tutor in Kharghar who turned everything around. I scored 92% in my board exams!"</p>
+        <div class="flex items-center gap-3 pt-4 border-t border-line">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md" style="background:linear-gradient(135deg,#7F46EA,#6425D9)">P</div>
+          <div><div class="font-bold text-sm text-[#1B1836]">Priya Sharma</div><div class="text-xs text-[#5F5B7A]">Class 10 · Kharghar</div></div>
+          <span class="ml-auto text-xs bg-brand-50 text-brand-600 font-semibold px-2.5 py-1 rounded-full">Maths</span>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-7 border border-line testimonial-card">
+        <div class="flex gap-1 mb-4 text-xl">⭐⭐⭐⭐⭐</div>
+        <p class="text-[#1B1836] text-sm leading-relaxed mb-5 italic">"The live doubt session feature is amazing. Whenever I'm stuck on a Physics problem at night, I just hop on and get it explained immediately!"</p>
+        <div class="flex items-center gap-3 pt-4 border-t border-line">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md" style="background:linear-gradient(135deg,#7F46EA,#6425D9)">A</div>
+          <div><div class="font-bold text-sm text-[#1B1836]">Aryan Patel</div><div class="text-xs text-[#5F5B7A]">Class 12 PCM · Belapur</div></div>
+          <span class="ml-auto text-xs bg-brand-50 text-brand-600 font-semibold px-2.5 py-1 rounded-full">Physics</span>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl p-7 border border-line testimonial-card">
+        <div class="flex gap-1 mb-4 text-xl">⭐⭐⭐⭐⭐</div>
+        <p class="text-[#1B1836] text-sm leading-relaxed mb-5 italic">"Got my DSA and DBMS concepts completely cleared. The experts are incredibly patient and explain step by step. Worth every rupee!"</p>
+        <div class="flex items-center gap-3 pt-4 border-t border-line">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md" style="background:linear-gradient(135deg,#7F46EA,#6425D9)">S</div>
+          <div><div class="font-bold text-sm text-[#1B1836]">Sneha Kulkarni</div><div class="text-xs text-[#5F5B7A]">College · Vashi</div></div>
+          <span class="ml-auto text-xs bg-brand-50 text-brand-600 font-semibold px-2.5 py-1 rounded-full">CS / DSA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     CTA BANNER — animated gradient
+════════════════════════════════════════ -->
+<section class="py-20 relative overflow-hidden" style="background:linear-gradient(135deg,#2A0F63 0%,#6425D9 50%,#3B1287 100%);background-size:200% 200%;animation:gradientShift 6s ease infinite">
+  <style>@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}</style>
+  <!-- Animated particles -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div style="position:absolute;top:10%;left:10%;width:300px;height:300px;background:rgba(255,255,255,0.03);border-radius:50%;animation:float 8s ease-in-out infinite"></div>
+    <div style="position:absolute;bottom:10%;right:10%;width:200px;height:200px;background:rgba(255,255,255,0.05);border-radius:50%;animation:float 6s ease-in-out infinite;animation-delay:-3s"></div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;background:rgba(127,70,234,0.1);border-radius:50%;filter:blur(80px)"></div>
+  </div>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10 reveal">
+    <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm text-white text-sm font-semibold px-4 py-2 rounded-full mb-6 border border-white/20">
+      <span class="w-2 h-2 bg-green-400 rounded-full" style="animation:blink 1.4s infinite"></span>
+      Tutors Available Now
+    </div>
+    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5 leading-tight">
+      Ready to Start<br>Learning Today?
+    </h2>
+    <p class="text-purple-100 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
+      Join 10,000+ students in Navi Mumbai who are learning smarter with iDelta. Your first session is free.
+    </p>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="pages/tutors.html" class="inline-flex items-center gap-2 bg-white text-brand-700 font-bold px-8 py-4 rounded-xl transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        Find a Tutor Near Me
+      </a>
+      <a href="pages/live-doubts.html" class="inline-flex items-center gap-2 border-2 border-white text-white font-bold px-8 py-4 rounded-xl transition-all hover:bg-white/10 hover:-translate-y-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.07A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+        Solve a Doubt Live
+      </a>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="js/shared.js" defer></script>
+
+<script>
+// ═══════════════════════════════════════
+// THREE.JS — 3D Particle Hero Scene
+// ═══════════════════════════════════════
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
+  camera.position.z = 5;
+
+  function resize(){
+    const s = canvas.parentElement;
+    renderer.setSize(s.clientWidth, s.clientHeight);
+    camera.aspect = s.clientWidth / s.clientHeight;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Particle field
+  const geo = new THREE.BufferGeometry();
+  const N = 180;
+  const pos = new Float32Array(N * 3);
+  for(let i=0; i<N; i++){
+    pos[i*3]   = (Math.random()-0.5)*14;
+    pos[i*3+1] = (Math.random()-0.5)*10;
+    pos[i*3+2] = (Math.random()-0.5)*8;
+  }
+  geo.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  const mat = new THREE.PointsMaterial({color:0x7F46EA, size:0.06, transparent:true, opacity:0.6});
+  const particles = new THREE.Points(geo, mat);
+  scene.add(particles);
+
+  // Floating geometric shapes
+  const shapes = [];
+  const geoms = [
+    new THREE.OctahedronGeometry(0.22),
+    new THREE.TetrahedronGeometry(0.18),
+    new THREE.IcosahedronGeometry(0.16),
+    new THREE.OctahedronGeometry(0.14),
+    new THREE.TetrahedronGeometry(0.20),
+  ];
+  const colors = [0x7F46EA, 0xA97BFF, 0x6425D9, 0xC4ACFF, 0x5018B5];
+  geoms.forEach((g,i) => {
+    const m = new THREE.MeshPhongMaterial({color:colors[i], transparent:true, opacity:0.5+Math.random()*0.3, shininess:80, wireframe:i%2===0});
+    const mesh = new THREE.Mesh(g, m);
+    mesh.position.set((Math.random()-0.5)*6, (Math.random()-0.5)*4, (Math.random()-0.5)*3);
+    mesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
+    mesh._speed = {rot: 0.004+Math.random()*0.008, float: 0.4+Math.random()*0.6, phase: Math.random()*Math.PI*2};
+    scene.add(mesh);
+    shapes.push(mesh);
+  });
+
+  // Connecting lines between close particles
+  const lineMat = new THREE.LineBasicMaterial({color:0xC4ACFF, transparent:true, opacity:0.15});
+  for(let i=0; i<12; i++){
+    const lGeo = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3((Math.random()-0.5)*12,(Math.random()-0.5)*8,(Math.random()-0.5)*4),
+      new THREE.Vector3((Math.random()-0.5)*12,(Math.random()-0.5)*8,(Math.random()-0.5)*4)
+    ]);
+    scene.add(new THREE.Line(lGeo, lineMat));
+  }
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  const dLight = new THREE.DirectionalLight(0x7F46EA, 1.2);
+  dLight.position.set(5, 5, 5);
+  scene.add(dLight);
+  const pLight = new THREE.PointLight(0xA97BFF, 1.5, 15);
+  pLight.position.set(-3, 3, 2);
+  scene.add(pLight);
+
+  // Mouse parallax
+  let mx=0, my=0;
+  document.addEventListener('mousemove', e=>{
+    mx = (e.clientX/window.innerWidth - 0.5)*0.6;
+    my = (e.clientY/window.innerHeight - 0.5)*0.4;
+  });
+
+  let t = 0;
+  (function animate(){
+    requestAnimationFrame(animate);
+    t += 0.012;
+    particles.rotation.y = t * 0.04;
+    particles.rotation.x = t * 0.02;
+    shapes.forEach(s => {
+      s.rotation.x += s._speed.rot;
+      s.rotation.y += s._speed.rot * 0.7;
+      s.position.y += Math.sin(t * s._speed.float + s._speed.phase) * 0.003;
+    });
+    camera.position.x += (mx - camera.position.x) * 0.05;
+    camera.position.y += (-my - camera.position.y) * 0.05;
+    camera.lookAt(scene.position);
+    renderer.render(scene, camera);
+  })();
+})();
+
+// ═══════════════════════════════════════
+// SCROLL REVEAL — Intersection Observer
+// ═══════════════════════════════════════
+const revealEls = document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.stagger');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+}, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+revealEls.forEach(el => revealObs.observe(el));
+
+// ═══════════════════════════════════════
+// ANIMATED COUNTERS
+// ═══════════════════════════════════════
+function animateCounter(el, target, suffix=''){
+  let start = 0;
+  const duration = 1800;
+  const step = timestamp => {
+    if(!start) start = timestamp;
+    const progress = Math.min((timestamp - start)/duration, 1);
+    const val = Math.floor(progress * target);
+    el.textContent = val >= 1000 ? (val/1000).toFixed(val>=10000?0:1)+'K' : val;
+    if(progress < 1) requestAnimationFrame(step);
+    else el.textContent = target >= 1000 ? (target/1000)+'K' : target;
+  };
+  requestAnimationFrame(step);
+}
+
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('[data-target]').forEach(el => {
+        animateCounter(el, +el.dataset.target);
+      });
+      counterObs.unobserve(e.target);
+    }
+  });
+}, {threshold:0.3});
+document.querySelectorAll('#stats-row').forEach(el => counterObs.observe(el));
+
+// ═══════════════════════════════════════
+// 3D TILT on subject cards
+// ═══════════════════════════════════════
+document.querySelectorAll('.subject-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width/2;
+    const y = e.clientY - r.top - r.height/2;
+    card.style.transform = `translateY(-8px) rotateX(${-y/8}deg) rotateY(${x/8}deg) scale(1.04)`;
+    card.style.boxShadow = `${-x/8}px ${y/8+12}px 36px rgba(100,37,217,0.18)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.boxShadow = '';
+  });
+});
+</script>
+</body>
+</html>

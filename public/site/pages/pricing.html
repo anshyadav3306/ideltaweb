@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="page" content="Pricing"><meta name="root" content="../">
+  <title>Pricing – iDelta | Affordable Learning Plans</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{brand:{50:'#F6F2FF',100:'#EDE5FF',200:'#D9C9FF',400:'#A97BFF',500:'#7F46EA',600:'#6425D9',700:'#5018B5',800:'#3B1287',900:'#2A0F63'},ink:'#1B1836',muted:'#5F5B7A',line:'#E6E1F2'},fontFamily:{sans:["'Plus Jakarta Sans'","ui-sans-serif","sans-serif"]}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/animations.js" defer></script>
+  <style>body{font-family:'Plus Jakarta Sans',sans-serif;color:#1B1836}.card-hover{transition:all .25s ease}.card-hover:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(100,37,217,.12)}</style>
+</head>
+<body class="bg-white antialiased">
+<div id="site-nav"></div>
+
+<!-- HERO -->
+<section class="bg-gradient-to-b from-brand-50 to-white py-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+    <div class="inline-flex items-center gap-2 bg-brand-100 text-brand-700 text-sm font-semibold px-4 py-2 rounded-full mb-5">💰 Flexible Pricing</div>
+    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#1B1836] mb-4">Choose the <span class="text-brand-600">Right Plan</span> for Your Learning</h1>
+    <p class="text-[#5F5B7A] text-lg max-w-xl mx-auto mb-10">Flexible and affordable plans for doubt solving and personalized learning.</p>
+    <!-- Toggle -->
+    <div x-data="{audience:'students'}" class="relative">
+      <div class="inline-flex bg-gray-100 p-1 rounded-2xl mb-12">
+        <button @click="audience='students'" :class="audience==='students'?'bg-brand-600 text-white shadow-md':'text-[#5F5B7A] hover:text-[#1B1836]'" class="px-6 py-2.5 rounded-xl font-bold text-sm transition-all">For Students</button>
+        <button @click="audience='tutors'" :class="audience==='tutors'?'bg-brand-600 text-white shadow-md':'text-[#5F5B7A] hover:text-[#1B1836]'" class="px-6 py-2.5 rounded-xl font-bold text-sm transition-all">For Tutors</button>
+      </div>
+
+      <!-- STUDENT PLANS -->
+      <div x-show="audience==='students'">
+        <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <!-- Basic -->
+          <div class="bg-white border-2 border-line rounded-3xl p-8 card-hover relative">
+            <div class="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center mb-5 text-2xl">📖</div>
+            <h3 class="text-xl font-extrabold text-[#1B1836] mb-1">Basic</h3>
+            <p class="text-[#5F5B7A] text-sm mb-5">Get started with essential support.</p>
+            <div class="mb-6"><span class="text-4xl font-extrabold text-[#1B1836]">₹199</span><span class="text-[#5F5B7A]"> / month</span></div>
+            <ul class="space-y-3 text-sm mb-8">
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Live doubt sessions (up to 5/month)</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Ask text &amp; image doubts</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Access to study resources</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Basic doubt resolution (chat)</li>
+              <li class="flex items-center gap-2 text-gray-400"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg> 1:1 expert sessions</li>
+              <li class="flex items-center gap-2 text-gray-400"><svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg> Recorded sessions</li>
+            </ul>
+            <button class="w-full border-2 border-brand-600 text-brand-600 hover:bg-brand-50 font-bold py-3 rounded-xl transition-colors">Get Basic</button>
+          </div>
+          <!-- Pro (highlighted) -->
+          <div class="bg-brand-600 rounded-3xl p-8 card-hover relative shadow-2xl shadow-brand-200 scale-105">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#F5B301] text-[#1B1836] text-xs font-extrabold px-4 py-1.5 rounded-full flex items-center gap-1">👑 Most Popular</div>
+            <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center mb-5 text-2xl">⚡</div>
+            <h3 class="text-xl font-extrabold text-white mb-1">Pro</h3>
+            <p class="text-brand-100 text-sm mb-5">Learn consistently with more support.</p>
+            <div class="mb-6"><span class="text-4xl font-extrabold text-white">₹399</span><span class="text-brand-100"> / month</span></div>
+            <ul class="space-y-3 text-sm mb-8 text-white">
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Live doubt sessions (up to 15/month)</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Priority doubt resolution</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> 1:1 doubt sessions with experts</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Access to recorded sessions &amp; notes</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Subject-wise practice material</li>
+            </ul>
+            <button class="w-full bg-white text-brand-700 hover:bg-brand-50 font-bold py-3 rounded-xl transition-colors">Get Pro</button>
+          </div>
+          <!-- Premium -->
+          <div class="bg-white border-2 border-line rounded-3xl p-8 card-hover relative">
+            <div class="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center mb-5 text-2xl">🏆</div>
+            <h3 class="text-xl font-extrabold text-[#1B1836] mb-1">Premium</h3>
+            <p class="text-[#5F5B7A] text-sm mb-5">All-in-one learning for serious learners.</p>
+            <div class="mb-6"><span class="text-4xl font-extrabold text-[#1B1836]">₹799</span><span class="text-[#5F5B7A]"> / month</span></div>
+            <ul class="space-y-3 text-sm mb-8">
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Unlimited live doubt sessions</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> 1:1 mentorship &amp; study guidance</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Personalized study plan</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Access to all study material &amp; tests</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Priority support</li>
+            </ul>
+            <button class="w-full border-2 border-brand-600 text-brand-600 hover:bg-brand-50 font-bold py-3 rounded-xl transition-colors">Get Premium</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TUTOR PLANS -->
+      <div x-show="audience==='tutors'" x-cloak>
+        <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div class="bg-white border-2 border-line rounded-3xl p-8 card-hover">
+            <div class="text-2xl mb-5">🌱</div>
+            <h3 class="text-xl font-extrabold text-[#1B1836] mb-1">Starter</h3>
+            <p class="text-[#5F5B7A] text-sm mb-5">Begin your teaching journey.</p>
+            <div class="mb-6"><span class="text-4xl font-extrabold text-[#1B1836]">Free</span></div>
+            <ul class="space-y-3 text-sm mb-8">
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Basic profile listing</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Up to 5 student enquiries/month</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Basic analytics</li>
+            </ul>
+            <button class="w-full border-2 border-brand-600 text-brand-600 hover:bg-brand-50 font-bold py-3 rounded-xl transition-colors">Get Started Free</button>
+          </div>
+          <div class="bg-brand-600 rounded-3xl p-8 card-hover shadow-2xl shadow-brand-200 scale-105">
+            <div class="text-2xl mb-5">🚀</div>
+            <h3 class="text-xl font-extrabold text-white mb-1">Growth</h3>
+            <p class="text-brand-100 text-sm mb-5">Scale your teaching business.</p>
+            <div class="mb-6"><span class="text-4xl font-extrabold text-white">₹299</span><span class="text-brand-100"> / month</span></div>
+            <ul class="space-y-3 text-sm mb-8 text-white">
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Featured profile listing</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Unlimited enquiries</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Accept doubt sessions</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Detailed earnings analytics</li>
+            </ul>
+            <button class="w-full bg-white text-brand-700 font-bold py-3 rounded-xl hover:bg-brand-50 transition-colors">Get Growth</button>
+          </div>
+          <div class="bg-white border-2 border-line rounded-3xl p-8 card-hover">
+            <div class="text-2xl mb-5">💎</div>
+            <h3 class="text-xl font-extrabold text-[#1B1836] mb-1">Pro Tutor</h3>
+            <p class="text-[#5F5B7A] text-sm mb-5">Maximum visibility &amp; earnings.</p>
+            <div class="mb-6"><span class="text-4xl font-extrabold text-[#1B1836]">₹599</span><span class="text-[#5F5B7A]"> / month</span></div>
+            <ul class="space-y-3 text-sm mb-8">
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Top placement in search results</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Dedicated account manager</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Instant payouts</li>
+              <li class="flex items-center gap-2"><svg class="w-4 h-4 text-brand-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Marketing &amp; profile promotion</li>
+            </ul>
+            <button class="w-full border-2 border-brand-600 text-brand-600 hover:bg-brand-50 font-bold py-3 rounded-xl transition-colors">Get Pro Tutor</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST ROW -->
+<section class="py-14 bg-[#FAF8FF]">
+  <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="text-center"><div class="text-3xl mb-2">⚡</div><div class="font-bold text-[#1B1836] text-sm">Instant Doubt Support</div><div class="text-xs text-[#5F5B7A] mt-1">Get help in real-time</div></div>
+    <div class="text-center"><div class="text-3xl mb-2">📚</div><div class="font-bold text-[#1B1836] text-sm">Expert Tutors</div><div class="text-xs text-[#5F5B7A] mt-1">Verified &amp; experienced</div></div>
+    <div class="text-center"><div class="text-3xl mb-2">📄</div><div class="font-bold text-[#1B1836] text-sm">Comprehensive Resources</div><div class="text-xs text-[#5F5B7A] mt-1">Notes, tests &amp; practice sets</div></div>
+    <div class="text-center"><div class="text-3xl mb-2">🎧</div><div class="font-bold text-[#1B1836] text-sm">Dedicated Support</div><div class="text-xs text-[#5F5B7A] mt-1">We're here to help always</div></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-16 bg-white" x-data="{open:null}">
+  <div class="max-w-3xl mx-auto px-4">
+    <h2 class="text-2xl font-extrabold text-[#1B1836] text-center mb-10">Frequently Asked Questions</h2>
+    <div class="space-y-3">
+      <template x-for="(faq,i) in [
+        {q:'Can I cancel my subscription anytime?',a:'Yes, you can cancel your subscription at any time. Your plan remains active until the end of your billing period.'},
+        {q:'Is there a free trial?',a:'Yes! We offer a 7-day free trial for the Pro plan. No credit card required to start.'},
+        {q:'How do live doubt sessions work?',a:'Once you book a session, you connect with an expert via video, audio, or chat. Sessions last 15–60 minutes based on your choice.'},
+        {q:'What payment methods do you accept?',a:'We accept UPI, Debit/Credit Cards, Net Banking, and popular wallets like Paytm and PhonePe.'},
+        {q:'Can I switch plans?',a:'Absolutely. You can upgrade or downgrade your plan at any time from your dashboard.'}
+      ]" :key="i">
+        <div class="border border-line rounded-2xl overflow-hidden">
+          <button @click="open===i?open=null:open=i" class="w-full flex items-center justify-between px-5 py-4 font-semibold text-[#1B1836] hover:bg-brand-50 transition-colors text-left gap-4">
+            <span x-text="faq.q"></span>
+            <svg class="w-5 h-5 text-brand-600 shrink-0 transition-transform" :class="open===i?'rotate-180':''" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div x-show="open===i" x-cloak class="px-5 pb-4 text-sm text-[#5F5B7A] leading-relaxed" x-text="faq.a"></div>
+        </div>
+      </template>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+</body>
+</html>

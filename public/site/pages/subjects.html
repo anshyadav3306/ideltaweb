@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="page" content="Subjects"><meta name="root" content="../">
+  <title>Subjects – iDelta | Browse All Subjects</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{brand:{50:'#F6F2FF',100:'#EDE5FF',200:'#D9C9FF',400:'#A97BFF',500:'#7F46EA',600:'#6425D9',700:'#5018B5',800:'#3B1287',900:'#2A0F63'},ink:'#1B1836',muted:'#5F5B7A',line:'#E6E1F2'},fontFamily:{sans:["'Plus Jakarta Sans'","ui-sans-serif","sans-serif"]}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/animations.js" defer></script>
+  <style>
+    body{font-family:'Plus Jakarta Sans',sans-serif;color:#1B1836}
+    /* Scoped transitions — only transform+shadow+border, NOT 'all' (avoids gradient delay) */
+    .card-hover{
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      will-change:transform;
+    }
+    .card-hover:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(100,37,217,.13);}
+    /* Subject card text color on hover */
+    .card-hover:hover .subj-name{color:#6425D9;}
+  </style>
+</head>
+<body class="bg-[#FAF8FF] antialiased">
+<div id="site-nav"></div>
+
+<!-- HERO -->
+<section class="bg-gradient-to-br from-brand-50 to-white py-14 border-b border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+    <div class="inline-block bg-brand-100 text-brand-700 text-xs font-bold px-3 py-1.5 rounded-full mb-4">📚 All Subjects</div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1B1836] mb-3">Explore Subjects</h1>
+    <p class="text-[#5F5B7A] max-w-xl mx-auto">Choose your class and subject to find the right tutor or get instant doubt support.</p>
+  </div>
+</section>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-10" x-data="{tab:'class'}">
+  <!-- Tabs -->
+  <div class="flex gap-2 mb-10 bg-white border border-line rounded-2xl p-1.5 inline-flex">
+    <button @click="tab='class'" :class="tab==='class'?'bg-brand-600 text-white shadow-md':'text-[#5F5B7A] hover:text-[#1B1836]'" class="px-6 py-2.5 rounded-xl font-bold text-sm transition-all">By Class</button>
+    <button @click="tab='stream'" :class="tab==='stream'?'bg-brand-600 text-white shadow-md':'text-[#5F5B7A] hover:text-[#1B1836]'" class="px-6 py-2.5 rounded-xl font-bold text-sm transition-all">By Stream</button>
+  </div>
+
+  <!-- BY CLASS -->
+  <div x-show="tab==='class'">
+    <h2 class="text-xl font-bold text-[#1B1836] mb-5">Browse by Class</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
+      <template x-for="cls in ['Class 6','Class 7','Class 8','Class 9','Class 10','Class 11','Class 12','College','B.Tech','MBA','IIT JEE','NEET']" :key="cls">
+        <a href="tutors.html" class="bg-white border border-line rounded-2xl p-5 text-center card-hover hover:border-brand-300 cursor-pointer">
+          <div class="text-2xl mb-2">🎓</div>
+          <div class="font-bold text-sm text-[#1B1836]" x-text="cls"></div>
+          <div class="text-xs text-[#5F5B7A] mt-1">All Subjects →</div>
+        </a>
+      </template>
+    </div>
+
+    <h2 class="text-xl font-bold text-[#1B1836] mb-5">Popular Subjects</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <template x-for="sub in [
+        {icon:'➕',name:'Mathematics',color:'from-blue-500 to-indigo-600',count:120},
+        {icon:'🔬',name:'Science',color:'from-green-500 to-emerald-600',count:95},
+        {icon:'📖',name:'English',color:'from-orange-500 to-amber-600',count:80},
+        {icon:'⚛️',name:'Physics',color:'from-purple-500 to-brand-600',count:75},
+        {icon:'🧪',name:'Chemistry',color:'from-red-500 to-rose-600',count:70},
+        {icon:'🧬',name:'Biology',color:'from-teal-500 to-cyan-600',count:60},
+        {icon:'💻',name:'Computer Science',color:'from-brand-500 to-brand-700',count:55},
+        {icon:'📜',name:'History',color:'from-yellow-500 to-amber-600',count:40},
+        {icon:'📈',name:'Economics',color:'from-pink-500 to-rose-600',count:45},
+        {icon:'🏦',name:'Accountancy',color:'from-slate-500 to-gray-600',count:38}
+      ]" :key="sub.name">
+        <a href="tutors.html" class="group bg-white border border-line rounded-2xl overflow-hidden card-hover hover:border-brand-300 cursor-pointer">
+          <div class="h-20 flex items-center justify-center text-3xl bg-gradient-to-br" :class="sub.color" style="opacity:0.9">
+            <span x-text="sub.icon"></span>
+          </div>
+          <div class="p-4">
+            <div class="font-bold text-sm text-[#1B1836] subj-name transition-colors" x-text="sub.name"></div>
+            <div class="text-xs text-[#5F5B7A] mt-1"><span x-text="sub.count"></span>+ Tutors</div>
+          </div>
+        </a>
+      </template>
+    </div>
+  </div>
+
+  <!-- BY STREAM -->
+  <div x-show="tab==='stream'" x-cloak>
+    <h2 class="text-xl font-bold text-[#1B1836] mb-5">Browse by Stream (Class 11–12 &amp; College)</h2>
+    <div class="grid md:grid-cols-3 gap-6 mb-12">
+      <div class="bg-white border border-line rounded-2xl overflow-hidden card-hover hover:border-brand-300">
+        <div class="h-24 bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-4xl">🔬</div>
+        <div class="p-6">
+          <h3 class="font-bold text-lg text-[#1B1836] mb-3">Science</h3>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full">Physics</span>
+            <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full">Chemistry</span>
+            <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full">Biology</span>
+            <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full">Mathematics</span>
+            <span class="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full">Computer Science</span>
+          </div>
+          <a href="tutors.html" class="text-brand-600 font-semibold text-sm hover:underline">Find Science Tutors →</a>
+        </div>
+      </div>
+      <div class="bg-white border border-line rounded-2xl overflow-hidden card-hover hover:border-brand-300">
+        <div class="h-24 bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-4xl">📊</div>
+        <div class="p-6">
+          <h3 class="font-bold text-lg text-[#1B1836] mb-3">Commerce</h3>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full">Accountancy</span>
+            <span class="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full">Business Studies</span>
+            <span class="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full">Economics</span>
+            <span class="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full">Mathematics</span>
+          </div>
+          <a href="tutors.html" class="text-brand-600 font-semibold text-sm hover:underline">Find Commerce Tutors →</a>
+        </div>
+      </div>
+      <div class="bg-white border border-line rounded-2xl overflow-hidden card-hover hover:border-brand-300">
+        <div class="h-24 bg-gradient-to-br from-purple-500 to-brand-600 flex items-center justify-center text-4xl">🎨</div>
+        <div class="p-6">
+          <h3 class="font-bold text-lg text-[#1B1836] mb-3">Arts / Humanities</h3>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="text-xs bg-purple-50 text-purple-700 font-semibold px-2.5 py-1 rounded-full">History</span>
+            <span class="text-xs bg-purple-50 text-purple-700 font-semibold px-2.5 py-1 rounded-full">Political Science</span>
+            <span class="text-xs bg-purple-50 text-purple-700 font-semibold px-2.5 py-1 rounded-full">Geography</span>
+            <span class="text-xs bg-purple-50 text-purple-700 font-semibold px-2.5 py-1 rounded-full">Economics</span>
+          </div>
+          <a href="tutors.html" class="text-brand-600 font-semibold text-sm hover:underline">Find Arts Tutors →</a>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white border border-line rounded-2xl p-8">
+      <h3 class="font-bold text-lg text-[#1B1836] mb-5">🏆 Competitive Exams</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <a href="tutors.html" class="border border-line rounded-xl p-4 text-center hover:border-brand-300 hover:bg-brand-50 transition-colors"><div class="font-bold text-[#1B1836]">IIT JEE</div><div class="text-xs text-[#5F5B7A]">40+ Tutors</div></a>
+        <a href="tutors.html" class="border border-line rounded-xl p-4 text-center hover:border-brand-300 hover:bg-brand-50 transition-colors"><div class="font-bold text-[#1B1836]">NEET</div><div class="text-xs text-[#5F5B7A]">35+ Tutors</div></a>
+        <a href="tutors.html" class="border border-line rounded-xl p-4 text-center hover:border-brand-300 hover:bg-brand-50 transition-colors"><div class="font-bold text-[#1B1836]">MHT-CET</div><div class="text-xs text-[#5F5B7A]">28+ Tutors</div></a>
+        <a href="tutors.html" class="border border-line rounded-xl p-4 text-center hover:border-brand-300 hover:bg-brand-50 transition-colors"><div class="font-bold text-[#1B1836]">GATE</div><div class="text-xs text-[#5F5B7A]">20+ Tutors</div></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="page" content="Find Tutors"><meta name="root" content="../">
+  <title>Find Tutors – iDelta Navi Mumbai</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{brand:{50:'#F6F2FF',100:'#EDE5FF',200:'#D9C9FF',300:'#C4ACFF',400:'#A97BFF',500:'#7F46EA',600:'#6425D9',700:'#5018B5',800:'#3B1287',900:'#2A0F63'},ink:'#1B1836',muted:'#5F5B7A',line:'#E6E1F2'},fontFamily:{sans:["'Plus Jakarta Sans'","ui-sans-serif","sans-serif"]}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/animations.js" defer></script>
+  <style>
+    body{font-family:'Plus Jakarta Sans',sans-serif;color:#1B1836}
+    .card-hover{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;will-change:transform}
+    .card-hover:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(100,37,217,.1)}
+    [x-cloak]{display:none!important}
+    /* Verified badge */
+    .verified-badge{display:inline-flex;align-items:center;gap:3px;background:#EDE5FF;color:#5018B5;font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:50px;white-space:nowrap}
+    .verified-badge svg{flex-shrink:0}
+  </style>
+</head>
+<body class="bg-white antialiased" x-data>
+<div id="site-nav"></div>
+
+<!-- HERO -->
+<section class="bg-gradient-to-br from-brand-50 to-white py-14">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <span class="inline-block bg-brand-100 text-brand-700 text-xs font-bold px-3 py-1 rounded-full mb-4">Home Tuition</span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1B1836] mb-3">Find Home Tutors Near You</h1>
+      <p class="text-[#5F5B7A]">Discover verified and experienced tutors for personalised home tuition.</p>
+    </div>
+
+    <!-- Search Bar — 4-column layout: Location | Class | Subject | Search button -->
+    <div class="bg-white rounded-2xl shadow-lg border border-line p-5 max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+        <div>
+          <label class="block text-xs font-bold text-[#5F5B7A] mb-1.5 uppercase tracking-wide">Location</label>
+          <select class="w-full border border-line rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-300">
+            <option>Navi Mumbai</option><option>Vashi</option><option>Nerul</option><option>Kharghar</option><option>Belapur CBD</option><option>Airoli</option><option>Panvel</option><option>Seawoods</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#5F5B7A] mb-1.5 uppercase tracking-wide">Class</label>
+          <select class="w-full border border-line rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-300">
+            <option>Select Class</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option><option>Class 11</option><option>Class 12</option><option>College</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-[#5F5B7A] mb-1.5 uppercase tracking-wide">Subject</label>
+          <select class="w-full border border-line rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-300">
+            <option>Select Subject</option><option>Mathematics</option><option>Science</option><option>English</option><option>Physics</option><option>Chemistry</option><option>Biology</option><option>Computer Science</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-transparent mb-1.5 uppercase tracking-wide">Search</label>
+          <button class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            Search Tutors
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<section class="py-10" x-data="{mode:'',board:[],maxfee:5000,minrating:0}">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex gap-8">
+
+      <!-- SIDEBAR FILTERS -->
+      <aside class="w-64 shrink-0 hidden lg:block">
+        <div class="bg-white border border-line rounded-2xl p-5 sticky top-24">
+          <div class="flex items-center justify-between mb-5">
+            <h3 class="font-bold text-[#1B1836]">Filters</h3>
+            <button @click="mode='';board=[];maxfee=5000;minrating=0" class="text-xs text-brand-600 font-semibold hover:underline">Clear All</button>
+          </div>
+
+          <!-- Mode -->
+          <div class="mb-6">
+            <div class="text-xs font-bold text-[#5F5B7A] uppercase tracking-wide mb-3">Teaching Mode</div>
+            <div class="space-y-2">
+              <label class="flex items-center gap-2 cursor-pointer"><input type="radio" x-model="mode" value="" class="accent-brand-600"> <span class="text-sm">Any</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="radio" x-model="mode" value="home" class="accent-brand-600"> <span class="text-sm">Home Tuition</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="radio" x-model="mode" value="online" class="accent-brand-600"> <span class="text-sm">Online</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="radio" x-model="mode" value="both" class="accent-brand-600"> <span class="text-sm">Home &amp; Online</span></label>
+            </div>
+          </div>
+
+          <!-- Board -->
+          <div class="mb-6">
+            <div class="text-xs font-bold text-[#5F5B7A] uppercase tracking-wide mb-3">Board</div>
+            <div class="space-y-2">
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" value="cbse" x-model="board" class="accent-brand-600 rounded"> <span class="text-sm">CBSE</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" value="icse" x-model="board" class="accent-brand-600 rounded"> <span class="text-sm">ICSE</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" value="state" x-model="board" class="accent-brand-600 rounded"> <span class="text-sm">State Board</span></label>
+            </div>
+          </div>
+
+          <!-- Fee -->
+          <div class="mb-6">
+            <div class="text-xs font-bold text-[#5F5B7A] uppercase tracking-wide mb-3">Fee Range (per month)</div>
+            <input type="range" x-model="maxfee" min="500" max="5000" step="100" class="w-full accent-brand-600">
+            <div class="flex justify-between text-xs text-[#5F5B7A] mt-1"><span>₹500</span><span class="font-bold text-brand-600">up to ₹<span x-text="maxfee"></span></span></div>
+          </div>
+
+          <!-- Rating -->
+          <div class="mb-6">
+            <div class="text-xs font-bold text-[#5F5B7A] uppercase tracking-wide mb-3">Minimum Rating</div>
+            <div class="space-y-2">
+              <label class="flex items-center gap-2 cursor-pointer"><input type="radio" x-model="minrating" :value="0" class="accent-brand-600"> <span class="text-sm">Any</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="radio" x-model="minrating" :value="4" class="accent-brand-600"> <span class="text-sm">⭐ 4.0+</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="radio" x-model="minrating" :value="4.5" class="accent-brand-600"> <span class="text-sm">⭐ 4.5+</span></label>
+            </div>
+          </div>
+
+          <!-- APPLY FILTERS BUTTON -->
+          <div class="border-t border-line pt-4 mt-2">
+            <button class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              Apply &amp; Search
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- TUTOR CARDS -->
+      <div class="flex-1">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-xl font-bold text-[#1B1836]">Available Tutors <span class="text-[#5F5B7A] font-normal text-base">(142 found)</span></h2>
+            <p class="text-sm text-[#5F5B7A]">Navi Mumbai · All subjects</p>
+          </div>
+          <select class="border border-line rounded-xl px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-300">
+            <option>Sort: Rating (High to Low)</option><option>Sort: Fee (Low to High)</option><option>Sort: Experience</option><option>Sort: Reviews</option>
+          </select>
+        </div>
+        <div class="space-y-4">
+          <template x-for="t in [
+            {name:'Prof. Rohan Kulkarni',subjects:'Mathematics, Physics',classes:'Class 10, 11, 12',loc:'Belapur, Navi Mumbai',exp:5,rating:4.0,reviews:200,fee:1200,mode:'Home Tuition',grad:'from-orange-500 to-amber-600',init:'R',online:true},
+            {name:'Ms. Pooja Singh',subjects:'Mathematics, English',classes:'Class 1–8',loc:'Belapur, Navi Mumbai',exp:4,rating:4.8,reviews:287,fee:1000,mode:'Home &amp; Online',grad:'from-blue-500 to-indigo-600',init:'P',online:true},
+            {name:'Mr. Aakash Tiwari',subjects:'Science, Biology',classes:'Class 8, 9, 10',loc:'Kharghar, Navi Mumbai',exp:6,rating:4.7,reviews:342,fee:1500,mode:'Home Tuition',grad:'from-green-500 to-emerald-600',init:'A',online:false},
+            {name:'Dr. Meena Joshi',subjects:'Chemistry, Biology',classes:'Class 11, 12 (PCB)',loc:'Vashi, Navi Mumbai',exp:9,rating:4.9,reviews:510,fee:2000,mode:'Online',grad:'from-purple-500 to-brand-600',init:'M',online:true},
+            {name:'Mr. Rahul Deshmukh',subjects:'Physics, Maths',classes:'Class 11, 12 (PCM)',loc:'Nerul, Navi Mumbai',exp:7,rating:4.6,reviews:198,fee:1800,mode:'Home &amp; Online',grad:'from-red-500 to-rose-600',init:'R',online:false},
+            {name:'Ms. Anjali Rao',subjects:'English, Social Science',classes:'Class 6–10',loc:'Panvel, Navi Mumbai',exp:3,rating:4.5,reviews:155,fee:900,mode:'Home Tuition',grad:'from-teal-500 to-cyan-600',init:'A',online:true}
+          ]" :key="t.name">
+            <div class="bg-white border border-line rounded-2xl p-5 card-hover" x-data="{saved:false}">
+              <div class="flex gap-4">
+                <!-- Avatar -->
+                <div class="shrink-0">
+                  <div class="w-16 h-16 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-md bg-gradient-to-br" :class="t.grad" x-text="t.init"></div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <div class="flex items-center gap-2 flex-wrap">
+                        <h3 class="font-bold text-[#1B1836]" x-text="t.name"></h3>
+                        <!-- Verified badge — clearly visible -->
+                        <span class="verified-badge">
+                          <svg width="12" height="12" fill="#5018B5" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                          </svg>
+                          Verified
+                        </span>
+                        <span x-show="t.online" class="inline-flex items-center gap-1 text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>Online Now</span>
+                      </div>
+                      <p class="text-sm text-[#5F5B7A] mt-0.5" x-text="t.subjects + ' · ' + t.exp + '+ years exp.'"></p>
+                    </div>
+                    <button @click="saved=!saved" class="shrink-0 p-2 rounded-xl hover:bg-brand-50 transition-colors">
+                      <svg class="w-5 h-5 transition-colors" :class="saved?'text-brand-600 fill-brand-600':'text-[#5F5B7A]'" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                    </button>
+                  </div>
+                  <div class="flex flex-wrap items-center gap-3 mt-2">
+                    <div class="flex items-center gap-1 text-sm">
+                      <span class="text-[#F5B301]">★</span>
+                      <span class="font-bold" x-text="t.rating"></span>
+                      <span class="text-[#5F5B7A]">(<span x-text="t.reviews"></span> reviews)</span>
+                    </div>
+                    <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1 rounded-full" x-text="t.classes"></span>
+                    <span class="text-xs bg-gray-100 text-gray-600 font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                      <span x-text="t.loc"></span>
+                    </span>
+                  </div>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t border-line">
+                    <div>
+                      <span class="text-xl font-extrabold text-[#1B1836]">₹<span x-text="t.fee.toLocaleString()"></span></span>
+                      <span class="text-sm text-[#5F5B7A]">/month</span>
+                      <div class="text-xs text-[#5F5B7A] mt-0.5" x-html="t.mode"></div>
+                    </div>
+                    <a href="tutor-profile.html" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-2.5 rounded-xl transition-colors text-sm">View Profile →</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-center gap-2 mt-10">
+          <button class="w-10 h-10 rounded-xl border border-line text-sm font-medium text-[#5F5B7A] hover:bg-brand-50 transition-colors">‹</button>
+          <button class="w-10 h-10 rounded-xl bg-brand-600 text-white text-sm font-bold">1</button>
+          <button class="w-10 h-10 rounded-xl border border-line text-sm font-medium text-[#5F5B7A] hover:bg-brand-50 transition-colors">2</button>
+          <button class="w-10 h-10 rounded-xl border border-line text-sm font-medium text-[#5F5B7A] hover:bg-brand-50 transition-colors">3</button>
+          <span class="text-[#5F5B7A]">…</span>
+          <button class="w-10 h-10 rounded-xl border border-line text-sm font-medium text-[#5F5B7A] hover:bg-brand-50 transition-colors">12</button>
+          <button class="w-10 h-10 rounded-xl border border-line text-sm font-medium text-[#5F5B7A] hover:bg-brand-50 transition-colors">›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+</body>
+</html>

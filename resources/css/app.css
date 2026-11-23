@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+@source '../views';
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('/fonts/PlusJakartaSans-Variable.woff2') format('woff2');
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --color-brand-50: #F6F2FF;
+  --color-brand-100: #EDE5FF;
+  --color-brand-200: #D9C9FF;
+  --color-brand-500: #7F46EA;
+  --color-brand-600: #6425D9;
+  --color-brand-700: #5018B5;
+  --color-brand-800: #3B1287;
+  --color-brand-900: #2A0F63;
+  --color-tint: #FAF8FF;
+  --color-ink: #1B1836;
+  --color-muted: #5F5B7A;
+  --color-line: #E6E1F2;
+  --color-ok: #12805C;
+  --color-warn: #B45309;
+  --color-danger: #C2273D;
+  --color-star: #F5B301;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  [x-cloak] { display: none !important; }
+  :focus-visible { outline: 3px solid var(--color-brand-500); outline-offset: 2px; }
+}

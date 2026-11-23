@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="page" content="book"><meta name="root" content="../">
+<title>Book a Doubt Session – iDelta</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="../js/shared.js" defer></script>
+<script src="../js/animations.js" defer></script>
+<style>
+  *{font-family:'Plus Jakarta Sans',sans-serif;box-sizing:border-box;}
+  body{background:#f7f4ff;}
+
+  .book-wrap{max-width:900px;margin:0 auto;padding:2rem 1rem 4rem;}
+  .card{background:#fff;border-radius:18px;padding:1.8rem;box-shadow:0 2px 16px rgba(100,37,217,.08);}
+
+  /* Mode cards */
+  .mode-card{border:2px solid #E6E1F2;border-radius:14px;padding:16px;cursor:pointer;text-align:center;transition:all .25s;}
+  .mode-card.selected,.mode-card:hover{border-color:#6425D9;background:#f0ebff;}
+  .mode-card.selected .mode-icon{background:#6425D9;color:#fff;}
+  .mode-icon{width:48px;height:48px;border-radius:12px;background:#f0ebff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin:0 auto 8px;transition:all .25s;}
+
+  /* Duration */
+  .dur-opt{border:2px solid #E6E1F2;border-radius:12px;padding:12px 14px;cursor:pointer;text-align:center;transition:all .2s;flex:1;}
+  .dur-opt.selected,.dur-opt:hover{border-color:#6425D9;background:#f0ebff;}
+
+  /* Calendar */
+  .cal-day{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;color:#1B1836;}
+  .cal-day:hover:not(.disabled):not(.selected){background:#f0ebff;color:#6425D9;}
+  .cal-day.selected{background:#6425D9;color:#fff;}
+  .cal-day.disabled{color:#E6E1F2;cursor:default;}
+  .cal-day.today{border:2px solid #6425D9;color:#6425D9;}
+
+  /* Time slot */
+  .tslot{padding:8px 14px;border:1.5px solid #E6E1F2;border-radius:9px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;color:#1B1836;}
+  .tslot.selected{border-color:#6425D9;background:#6425D9;color:#fff;}
+  .tslot.disabled{opacity:.4;cursor:not-allowed;pointer-events:none;}
+
+  /* Steps */
+  .step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;flex-shrink:0;}
+
+  /* Confirm btn */
+  .btn-confirm{width:100%;padding:14px;background:linear-gradient(135deg,#6425D9,#8B46FF);color:#fff;font-weight:700;font-size:1rem;border:none;border-radius:14px;cursor:pointer;transition:transform .2s,box-shadow .2s;}
+  .btn-confirm:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(100,37,217,.35);}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+
+<div class="book-wrap" x-data="{
+  mode:'video', dur:30, selDay:5, selSlot:'5:00 PM', confirmed:false,
+  month:'Nov 2026',
+  days:[
+    {d:1,dis:true},{d:2,dis:true},{d:3,dis:true},{d:4,dis:false},{d:5,dis:false},
+    {d:6,dis:false},{d:7,dis:false},{d:8,dis:false},{d:9,dis:false},{d:10,dis:false},
+    {d:11,dis:false},{d:12,dis:false},{d:13,dis:false},{d:14,dis:false},{d:15,dis:false},
+    {d:16,dis:false},{d:17,dis:false},{d:18,dis:false},{d:19,dis:false},{d:20,dis:false},
+    {d:21,dis:false},{d:22,dis:false},{d:23,dis:false},{d:24,dis:false},{d:25,dis:false},
+    {d:26,dis:false},{d:27,dis:false},{d:28,dis:false},{d:29,dis:false},{d:30,dis:false}
+  ],
+  slots:['4:00 PM','4:30 PM','5:00 PM','5:30 PM','6:00 PM','6:30 PM','7:00 PM','7:30 PM','8:00 PM'],
+  disabledSlots:['4:30 PM','7:30 PM','8:00 PM'],
+  price(){return this.dur===15?199:this.dur===30?399:699;}
+}">
+  <div class="text-sm mb-4" style="color:#5F5B7A"><a href="tutors.html" style="color:#6425D9">← Back</a> / Book Session</div>
+  <h1 class="text-2xl font-bold mb-6" style="color:#1B1836">📅 Book a Doubt Session</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+    <!-- Left booking form -->
+    <div class="md:col-span-3 space-y-5">
+
+      <!-- Step 1: Tutor info -->
+      <div class="card reveal">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="step-num" style="background:#6425D9;color:#fff;">1</div>
+          <h2 class="font-bold text-base" style="color:#1B1836">Your Tutor</h2>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <img src="https://i.pravatar.cc/64?img=47" class="w-16 h-16 rounded-full" style="border:3px solid #6425D9">
+            <div class="absolute bottom-0 right-0 w-5 h-5 rounded-full border-2 border-white" style="background:#22c55e"></div>
+          </div>
+          <div>
+            <div class="font-bold" style="color:#1B1836">Prof. Neha Sharma <span style="background:#6425D9;color:#fff;font-size:.7rem;padding:2px 8px;border-radius:50px;margin-left:4px;">✓ Verified</span></div>
+            <div class="text-sm mt-0.5" style="color:#5F5B7A">Computer Science · 5+ years exp.</div>
+            <div style="color:#f59e0b;font-size:.9rem;">★★★★★ <span class="text-xs font-bold" style="color:#1B1836">4.9</span> <span class="text-xs" style="color:#5F5B7A">(1,284 sessions)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Mode -->
+      <div class="card reveal">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="step-num" style="background:#6425D9;color:#fff;">2</div>
+          <h2 class="font-bold text-base" style="color:#1B1836">Select Mode</h2>
+        </div>
+        <div class="grid grid-cols-3 gap-3">
+          <div class="mode-card" :class="{selected:mode==='video'}" @click="mode='video'">
+            <div class="mode-icon">📹</div>
+            <div class="font-bold text-sm" style="color:#1B1836">Video Call</div>
+            <div class="text-xs mt-1" style="color:#5F5B7A">Face to face</div>
+          </div>
+          <div class="mode-card" :class="{selected:mode==='audio'}" @click="mode='audio'">
+            <div class="mode-icon">🎙</div>
+            <div class="font-bold text-sm" style="color:#1B1836">Audio Call</div>
+            <div class="text-xs mt-1" style="color:#5F5B7A">Voice only</div>
+          </div>
+          <div class="mode-card" :class="{selected:mode==='chat'}" @click="mode='chat'">
+            <div class="mode-icon">💬</div>
+            <div class="font-bold text-sm" style="color:#1B1836">Chat Doubt</div>
+            <div class="text-xs mt-1" style="color:#5F5B7A">Text + images</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Duration -->
+      <div class="card reveal">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="step-num" style="background:#6425D9;color:#fff;">3</div>
+          <h2 class="font-bold text-base" style="color:#1B1836">Select Duration</h2>
+        </div>
+        <div class="flex gap-3">
+          <div class="dur-opt" :class="{selected:dur===15}" @click="dur=15">
+            <div class="font-bold text-lg" style="color:#6425D9">₹199</div>
+            <div class="text-sm font-semibold" style="color:#1B1836">15 mins</div>
+            <div class="text-xs" style="color:#5F5B7A">Quick doubt</div>
+          </div>
+          <div class="dur-opt" :class="{selected:dur===30}" @click="dur=30">
+            <div class="font-bold text-lg" style="color:#6425D9">₹399</div>
+            <div class="text-sm font-semibold" style="color:#1B1836">30 mins</div>
+            <div class="text-xs" style="color:#5F5B7A">Standard</div>
+            <div class="text-xs mt-1 font-semibold" style="color:#22c55e">Most popular</div>
+          </div>
+          <div class="dur-opt" :class="{selected:dur===60}" @click="dur=60">
+            <div class="font-bold text-lg" style="color:#6425D9">₹699</div>
+            <div class="text-sm font-semibold" style="color:#1B1836">60 mins</div>
+            <div class="text-xs" style="color:#5F5B7A">Deep dive</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Date -->
+      <div class="card reveal">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="step-num" style="background:#6425D9;color:#fff;">4</div>
+          <h2 class="font-bold text-base" style="color:#1B1836">Pick a Date</h2>
+        </div>
+        <div class="flex items-center justify-between mb-3">
+          <button class="p-1 rounded-lg hover:bg-gray-100 font-bold text-gray-500">‹</button>
+          <span class="font-bold text-sm" style="color:#1B1836" x-text="month"></span>
+          <button class="p-1 rounded-lg hover:bg-gray-100 font-bold text-gray-500">›</button>
+        </div>
+        <div class="grid grid-cols-7 gap-1 text-center text-xs font-semibold mb-2" style="color:#5F5B7A">
+          <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+        </div>
+        <div class="grid grid-cols-7 gap-1">
+          <!-- offset for Nov 1 = Sunday -->
+          <template x-for="day in days">
+            <div class="cal-day"
+              :class="{selected:selDay===day.d, disabled:day.dis}"
+              @click="!day.dis && (selDay=day.d)"
+              x-text="day.d">
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Step 5: Time -->
+      <div class="card reveal">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="step-num" style="background:#6425D9;color:#fff;">5</div>
+          <h2 class="font-bold text-base" style="color:#1B1836">Pick a Time</h2>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <template x-for="slot in slots">
+            <div class="tslot"
+              :class="{selected:selSlot===slot, disabled:disabledSlots.includes(slot)}"
+              @click="!disabledSlots.includes(slot) && (selSlot=slot)"
+              x-text="slot">
+            </div>
+          </template>
+        </div>
+        <div class="mt-3 text-xs" style="color:#5F5B7A">
+          <span style="border:1.5px solid #E6E1F2;padding:3px 8px;border-radius:6px;margin-right:6px;">Available</span>
+          <span style="border:1.5px solid #6425D9;background:#6425D9;color:#fff;padding:3px 8px;border-radius:6px;margin-right:6px;">Selected</span>
+          <span style="opacity:.4;border:1.5px solid #E6E1F2;padding:3px 8px;border-radius:6px;">Booked</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right summary -->
+    <div class="md:col-span-2">
+      <div class="card reveal" style="position:sticky;top:84px;">
+        <h3 class="font-bold mb-4" style="color:#1B1836">Session Summary</h3>
+        <div class="space-y-3 mb-4 text-sm">
+          <div class="flex justify-between" style="color:#5F5B7A"><span>Tutor</span><span class="font-semibold" style="color:#1B1836">Prof. Neha Sharma</span></div>
+          <div class="flex justify-between" style="color:#5F5B7A"><span>Mode</span><span class="font-semibold capitalize" style="color:#1B1836" x-text="mode==='video'?'📹 Video Call':mode==='audio'?'🎙 Audio Call':'💬 Chat Doubt'"></span></div>
+          <div class="flex justify-between" style="color:#5F5B7A"><span>Duration</span><span class="font-semibold" style="color:#1B1836" x-text="dur+' minutes'"></span></div>
+          <div class="flex justify-between" style="color:#5F5B7A"><span>Date</span><span class="font-semibold" style="color:#1B1836" x-text="'Nov ' + selDay + ', 2026'"></span></div>
+          <div class="flex justify-between" style="color:#5F5B7A"><span>Time</span><span class="font-semibold" style="color:#1B1836" x-text="selSlot"></span></div>
+          <div class="border-t pt-3 mt-3 flex justify-between font-bold text-base" style="border-color:#E6E1F2;color:#1B1836">
+            <span>Total</span>
+            <span style="color:#6425D9">₹<span x-text="price()"></span></span>
+          </div>
+        </div>
+
+        <div x-show="!confirmed">
+          <button @click="confirmed=true" class="btn-confirm">Confirm Booking →</button>
+          <p class="text-xs text-center mt-2" style="color:#5F5B7A">Free cancellation up to 2 hrs before</p>
+        </div>
+        <div x-show="confirmed" class="text-center py-4">
+          <div class="text-5xl mb-3">🎉</div>
+          <div class="font-bold text-lg" style="color:#1B1836">Booking Confirmed!</div>
+          <div class="text-sm mt-1" style="color:#5F5B7A">You'll get a reminder 15 mins before</div>
+          <a href="dashboard.html" class="mt-4 block text-center py-2 rounded-xl font-semibold text-sm" style="background:#f0ebff;color:#6425D9;">Go to Dashboard →</a>
+        </div>
+
+        <div class="mt-4 p-3 rounded-xl text-xs space-y-1" style="background:#f7f4ff;color:#5F5B7A;">
+          <div class="flex items-center gap-2"><span style="color:#6425D9">✓</span> Instant confirmation via SMS & email</div>
+          <div class="flex items-center gap-2"><span style="color:#6425D9">✓</span> Session link sent 10 mins before</div>
+          <div class="flex items-center gap-2"><span style="color:#6425D9">✓</span> Secure payment via Razorpay</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+</body>
+</html>

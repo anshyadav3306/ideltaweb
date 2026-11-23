@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="page" content="dashboard"><meta name="root" content="../">
+<title>Dashboard – iDelta | Learn · Solve · Grow</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="../js/shared.js" defer></script>
+<script src="../js/animations.js" defer></script>
+<style>
+  *{font-family:'Plus Jakarta Sans',sans-serif;box-sizing:border-box;}
+  body{background:#f7f4ff;min-height:100vh;}
+
+  /* Sidebar */
+  .dash-wrap{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 72px);}
+  @media(max-width:768px){.dash-wrap{grid-template-columns:1fr;} .sidebar{display:none;}}
+  .sidebar{background:#1B1836;padding:1.5rem 1rem;display:flex;flex-direction:column;gap:.5rem;}
+  .nav-item{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:12px;color:rgba(255,255,255,.65);font-size:.93rem;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;}
+  .nav-item:hover,.nav-item.active{background:rgba(100,37,217,.4);color:#fff;}
+  .nav-item.active{background:#6425D9;color:#fff;}
+  .nav-icon{width:20px;text-align:center;}
+
+  /* Main */
+  .dash-main{padding:2rem;overflow-y:auto;}
+
+  /* Stat card */
+  .stat-card{background:#fff;border-radius:16px;padding:1.4rem;box-shadow:0 2px 16px rgba(100,37,217,.07);display:flex;flex-direction:column;gap:.5rem;}
+  .stat-num{font-size:2.2rem;font-weight:800;line-height:1;}
+  .stat-label{font-size:.85rem;color:#5F5B7A;}
+
+  /* Session card */
+  .session-card{background:#fff;border-radius:14px;padding:1.2rem 1.5rem;box-shadow:0 2px 12px rgba(100,37,217,.07);display:flex;align-items:center;gap:1rem;}
+
+  /* Quick action */
+  .qa-btn{background:#fff;border-radius:16px;padding:1.4rem;box-shadow:0 2px 12px rgba(100,37,217,.07);display:flex;flex-direction:column;align-items:center;gap:.7rem;cursor:pointer;transition:all .25s;text-align:center;}
+  .qa-btn:hover{box-shadow:0 8px 24px rgba(100,37,217,.18);transform:translateY(-3px);}
+  .qa-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+
+  /* Progress bar */
+  .prog-bar{height:8px;border-radius:50px;background:#E6E1F2;overflow:hidden;}
+  .prog-fill{height:100%;border-radius:50px;background:linear-gradient(90deg,#6425D9,#a855f7);transition:width 1.2s ease;}
+
+  /* Mini chart SVG */
+  .chart-wrap{position:relative;overflow:hidden;}
+</style>
+</head>
+<body x-data="{activeNav:'dashboard'}">
+<div id="site-nav"></div>
+
+<div class="dash-wrap">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Logo -->
+    <div class="flex items-center gap-2 px-2 mb-4">
+      <svg width="30" height="30" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="9" fill="#6425D9"/><path d="M18 8L28 14v8c0 5.52-4.48 10-10 10S8 27.52 8 22v-8l10-6z" fill="white" fill-opacity=".9"/></svg>
+      <span class="text-white font-bold text-lg">iDelta</span>
+    </div>
+    <div class="text-xs uppercase tracking-widest px-2 mb-2 text-purple-400 font-semibold">Main</div>
+    <a href="#" class="nav-item active" @click.prevent="activeNav='dashboard'"><span class="nav-icon">📊</span> Dashboard</a>
+    <a href="#" class="nav-item" @click.prevent="activeNav='sessions'"><span class="nav-icon">📅</span> My Sessions</a>
+    <a href="#" class="nav-item" @click.prevent="activeNav='tutors'"><span class="nav-icon">👨‍🏫</span> My Tutors</a>
+    <a href="#" class="nav-item"><span class="nav-icon">🔖</span> Bookmarks</a>
+    <div class="text-xs uppercase tracking-widest px-2 mb-2 mt-4 text-purple-400 font-semibold">Account</div>
+    <a href="#" class="nav-item"><span class="nav-icon">💳</span> Payments</a>
+    <a href="#" class="nav-item"><span class="nav-icon">👤</span> Profile</a>
+    <a href="login.html" class="nav-item mt-auto"><span class="nav-icon">🚪</span> Logout</a>
+  </div>
+
+  <!-- Main content -->
+  <div class="dash-main">
+    <!-- Welcome -->
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <h1 class="text-2xl font-bold" style="color:#1B1836">Welcome back! 👋</h1>
+        <p class="text-sm mt-1" style="color:#5F5B7A">Continue learning, book a session or explore new tutors.</p>
+      </div>
+      <div class="hidden md:flex items-center gap-2 px-4 py-2 rounded-xl" style="background:#fff;box-shadow:0 2px 12px rgba(100,37,217,.08)">
+        <div class="w-2 h-2 rounded-full bg-green-400"></div>
+        <span class="text-sm font-semibold" style="color:#1B1836">24 Experts Online</span>
+      </div>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 stagger">
+      <div class="stat-card tilt-card">
+        <div class="text-2xl">📅</div>
+        <div class="stat-num" style="color:#6425D9" data-counter data-target="3" data-suffix="">3</div>
+        <div class="stat-label">Upcoming Sessions</div>
+      </div>
+      <div class="stat-card tilt-card">
+        <div class="text-2xl">✅</div>
+        <div class="stat-num" style="color:#059669" data-counter data-target="15" data-suffix="">15</div>
+        <div class="stat-label">Completed Sessions</div>
+      </div>
+      <div class="stat-card tilt-card">
+        <div class="text-2xl">🔖</div>
+        <div class="stat-num" style="color:#d97706" data-counter data-target="5" data-suffix="">5</div>
+        <div class="stat-label">Saved Tutors</div>
+      </div>
+      <div class="stat-card tilt-card">
+        <div class="text-2xl">⭐</div>
+        <div class="stat-num" style="color:#6425D9">4.8</div>
+        <div class="stat-label">Avg Session Rating</div>
+      </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Upcoming sessions -->
+      <div class="lg:col-span-2 space-y-4">
+        <h2 class="font-bold text-lg" style="color:#1B1836">Upcoming Sessions</h2>
+        <div class="space-y-3">
+          <template x-for="s in [
+            {tutor:'Prof. Neha Sharma',sub:'DSA · Array Problems',date:'Today, 5:00 PM',dur:'30 min',mode:'📹 Video',color:'#6425D9',avatar:'47'},
+            {tutor:'Prof. Arjun Mehta',sub:'Algorithms · Sorting',date:'Mon, Nov 25 · 4:00 PM',dur:'30 min',mode:'🎙 Audio',color:'#059669',avatar:'51'},
+            {tutor:'Prof. Riya Desai',sub:'Maths · Calculus',date:'Wed, Nov 27 · 6:00 PM',dur:'60 min',mode:'💬 Chat',color:'#d97706',avatar:'53'},
+          ]">
+            <div class="session-card reveal">
+              <img :src="'https://i.pravatar.cc/48?img='+s.avatar" class="w-12 h-12 rounded-full border-2" :style="'border-color:'+s.color">
+              <div class="flex-1">
+                <div class="font-bold text-sm" style="color:#1B1836" x-text="s.tutor"></div>
+                <div class="text-xs mt-0.5" style="color:#5F5B7A" x-text="s.sub"></div>
+                <div class="flex items-center gap-3 mt-1 text-xs font-medium" style="color:#5F5B7A">
+                  <span x-text="s.date"></span>
+                  <span>·</span>
+                  <span x-text="s.dur"></span>
+                  <span>·</span>
+                  <span x-text="s.mode"></span>
+                </div>
+              </div>
+              <button class="px-4 py-2 rounded-xl text-xs font-bold text-white transition-all hover:opacity-80" :style="'background:'+s.color">Join →</button>
+            </div>
+          </template>
+        </div>
+
+        <!-- Quick Actions -->
+        <h2 class="font-bold text-lg mt-6" style="color:#1B1836">Quick Actions</h2>
+        <div class="grid grid-cols-3 gap-4 stagger">
+          <a href="live-doubts.html" class="qa-btn">
+            <div class="qa-icon" style="background:#f0ebff"><span>⚡</span></div>
+            <div class="font-bold text-sm" style="color:#1B1836">Solve a Doubt Live</div>
+            <div class="text-xs" style="color:#5F5B7A">Connect instantly</div>
+          </a>
+          <a href="tutors.html" class="qa-btn">
+            <div class="qa-icon" style="background:#ecfdf5"><span>🏠</span></div>
+            <div class="font-bold text-sm" style="color:#1B1836">Find Home Tutor</div>
+            <div class="text-xs" style="color:#5F5B7A">Near your area</div>
+          </a>
+          <a href="subjects.html" class="qa-btn">
+            <div class="qa-icon" style="background:#fef3c7"><span>📚</span></div>
+            <div class="font-bold text-sm" style="color:#1B1836">Explore Subjects</div>
+            <div class="text-xs" style="color:#5F5B7A">All classes & boards</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="space-y-5">
+        <!-- Progress -->
+        <div class="stat-card reveal">
+          <h3 class="font-bold text-sm mb-3" style="color:#1B1836">📈 Learning Progress</h3>
+          <div class="space-y-3">
+            <div>
+              <div class="flex justify-between text-xs font-medium mb-1" style="color:#5F5B7A"><span>Mathematics</span><span style="color:#6425D9">72%</span></div>
+              <div class="prog-bar"><div class="prog-fill" style="width:72%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-medium mb-1" style="color:#5F5B7A"><span>Computer Science</span><span style="color:#6425D9">88%</span></div>
+              <div class="prog-bar"><div class="prog-fill" style="width:88%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-medium mb-1" style="color:#5F5B7A"><span>Physics</span><span style="color:#6425D9">45%</span></div>
+              <div class="prog-bar"><div class="prog-fill" style="width:45%"></div></div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs font-medium mb-1" style="color:#5F5B7A"><span>English</span><span style="color:#6425D9">60%</span></div>
+              <div class="prog-bar"><div class="prog-fill" style="width:60%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subscription -->
+        <div class="reveal" style="background:linear-gradient(135deg,#6425D9,#2A0F63);border-radius:16px;padding:1.5rem;color:#fff;">
+          <div style="color:#c4b5fd;font-size:.8rem;font-weight:600;margin-bottom:.5rem;">CURRENT PLAN</div>
+          <div class="text-2xl font-black mb-1">Pro Plan 🏅</div>
+          <div style="color:#c4b5fd;font-size:.85rem;margin-bottom:1rem;">₹399 / month · Renews Dec 22</div>
+          <div class="space-y-1.5 text-sm">
+            <div class="flex items-center gap-2"><span style="color:#a78bfa">✓</span> Up to 15 doubt sessions/month</div>
+            <div class="flex items-center gap-2"><span style="color:#a78bfa">✓</span> Priority doubt resolution</div>
+            <div class="flex items-center gap-2"><span style="color:#a78bfa">✓</span> 1:1 sessions with experts</div>
+          </div>
+          <a href="pricing.html" class="mt-4 block text-center py-2 rounded-xl font-bold text-sm bg-white/15 hover:bg-white/25 transition-all" style="color:#fff">Upgrade to Premium →</a>
+        </div>
+
+        <!-- Saved Tutors -->
+        <div class="stat-card reveal">
+          <h3 class="font-bold text-sm mb-3" style="color:#1B1836">🔖 Saved Tutors</h3>
+          <div class="space-y-3">
+            <template x-for="t in [{name:'Prof. Neha Sharma',sub:'CS · DSA',img:'47'},{name:'Prof. Riya Desai',sub:'Maths',img:'53'},{name:'Prof. Arjun Mehta',sub:'Algorithms',img:'51'}]">
+              <div class="flex items-center gap-3">
+                <img :src="'https://i.pravatar.cc/36?img='+t.img" class="w-9 h-9 rounded-full">
+                <div class="flex-1">
+                  <div class="text-sm font-semibold" style="color:#1B1836" x-text="t.name"></div>
+                  <div class="text-xs" style="color:#5F5B7A" x-text="t.sub"></div>
+                </div>
+                <a :href="'tutor-profile.html'" class="text-xs font-semibold hover:underline" style="color:#6425D9">Book</a>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+</body>
+</html>

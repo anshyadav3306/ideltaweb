@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="page" content="Blog"><meta name="root" content="../">
+  <title>Blog – iDelta | Study Tips, Exam Guides & Learning Resources</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={theme:{extend:{colors:{brand:{50:'#F6F2FF',100:'#EDE5FF',200:'#D9C9FF',400:'#A97BFF',500:'#7F46EA',600:'#6425D9',700:'#5018B5',800:'#3B1287',900:'#2A0F63'},ink:'#1B1836',muted:'#5F5B7A',line:'#E6E1F2'},fontFamily:{sans:["'Plus Jakarta Sans'","ui-sans-serif","sans-serif"]}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="../js/shared.js" defer></script>
+  <script src="../js/animations.js" defer></script>
+  <style>body{font-family:'Plus Jakarta Sans',sans-serif;color:#1B1836}.card-hover{transition:all .25s ease}.card-hover:hover{transform:translateY(-3px);box-shadow:0 16px 36px rgba(100,37,217,.1)}</style>
+</head>
+<body class="bg-[#FAF8FF] antialiased">
+<div id="site-nav"></div>
+
+<!-- HERO -->
+<section class="bg-gradient-to-br from-brand-50 to-white py-14 border-b border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+    <div class="inline-block bg-brand-100 text-brand-700 text-xs font-bold px-3 py-1.5 rounded-full mb-4">📰 iDelta Blog</div>
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-[#1B1836] mb-3">Study Tips, Exam Guides<br>&amp; Learning Resources</h1>
+    <p class="text-[#5F5B7A] max-w-xl mx-auto mb-8">Expert advice, subject guides, and study strategies to help students excel.</p>
+    <div class="flex max-w-md mx-auto gap-2">
+      <input type="text" placeholder="Search articles..." class="flex-1 border border-line rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-300 bg-white">
+      <button class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">Search</button>
+    </div>
+  </div>
+</section>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-12" x-data="{cat:'all'}">
+  <!-- Category Tabs -->
+  <div class="flex gap-2 overflow-x-auto pb-2 mb-10 flex-wrap">
+    <button @click="cat='all'" :class="cat==='all'?'bg-brand-600 text-white':'bg-white border border-line text-[#5F5B7A] hover:border-brand-300'" class="px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap">All Articles</button>
+    <button @click="cat='exam'" :class="cat==='exam'?'bg-brand-600 text-white':'bg-white border border-line text-[#5F5B7A] hover:border-brand-300'" class="px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap">Exam Prep</button>
+    <button @click="cat='study'" :class="cat==='study'?'bg-brand-600 text-white':'bg-white border border-line text-[#5F5B7A] hover:border-brand-300'" class="px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap">Study Tips</button>
+    <button @click="cat='subject'" :class="cat==='subject'?'bg-brand-600 text-white':'bg-white border border-line text-[#5F5B7A] hover:border-brand-300'" class="px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap">Subject Guides</button>
+    <button @click="cat='parent'" :class="cat==='parent'?'bg-brand-600 text-white':'bg-white border border-line text-[#5F5B7A] hover:border-brand-300'" class="px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap">For Parents</button>
+    <button @click="cat='tutor'" :class="cat==='tutor'?'bg-brand-600 text-white':'bg-white border border-line text-[#5F5B7A] hover:border-brand-300'" class="px-4 py-2 rounded-full text-sm font-semibold transition-all whitespace-nowrap">For Tutors</button>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-8">
+    <!-- Articles Grid -->
+    <div class="lg:col-span-2 space-y-6">
+      <!-- Featured -->
+      <div class="bg-gradient-to-br from-brand-600 to-brand-800 rounded-3xl p-8 text-white card-hover">
+        <span class="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-full mb-4">📌 Featured</span>
+        <h2 class="text-2xl font-extrabold mb-3">How to Score 90%+ in Class 10 Board Exams: A Complete Strategy</h2>
+        <p class="text-brand-100 leading-relaxed mb-5">Master the board exam season with our comprehensive guide — from timetable planning to last-minute revision tricks used by top scorers across CBSE, ICSE, and State Board.</p>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center font-bold text-sm">P</div>
+          <div><div class="font-semibold text-sm">Dr. Priya Joshi</div><div class="text-brand-200 text-xs">Academic Expert · 15 Nov 2026</div></div>
+          <span class="ml-auto text-xs bg-white/20 px-3 py-1 rounded-full">12 min read</span>
+        </div>
+      </div>
+      <!-- Article Cards Grid -->
+      <div class="grid sm:grid-cols-2 gap-5">
+        <template x-for="post in [
+          {icon:'📐',cat:'Subject Guide',title:'Mathematics Class 12: Complete Chapter-wise Study Plan',author:'Anjali Rao',date:'18 Nov 2026',time:'8 min',color:'bg-blue-50 text-blue-700'},
+          {icon:'🧪',cat:'Exam Prep',title:'NEET 2027 Preparation: 6-Month Roadmap for Biology',author:'Dr. Kunal Verma',date:'16 Nov 2026',time:'10 min',color:'bg-green-50 text-green-700'},
+          {icon:'💡',cat:'Study Tips',title:'5 Scientifically Proven Study Methods That Actually Work',author:'Rohan Mehta',date:'14 Nov 2026',time:'6 min',color:'bg-purple-50 text-purple-700'},
+          {icon:'🏠',cat:'For Parents',title:'How to Choose the Right Home Tutor for Your Child',author:'Sneha Patil',date:'12 Nov 2026',time:'7 min',color:'bg-orange-50 text-orange-700'},
+          {icon:'💻',cat:'Subject Guide',title:'DSA for Beginners: Where to Start and What to Practice',author:'Prof. Arjun Mehta',date:'10 Nov 2026',time:'9 min',color:'bg-teal-50 text-teal-700'},
+          {icon:'📈',cat:'For Tutors',title:'How to Build a Successful Tutor Profile on iDelta',author:'iDelta Team',date:'8 Nov 2026',time:'5 min',color:'bg-pink-50 text-pink-700'}
+        ]" :key="post.title">
+          <div class="bg-white rounded-2xl border border-line overflow-hidden card-hover cursor-pointer">
+            <div class="p-5 flex items-center justify-center text-5xl h-28" :class="post.color.split(' ')[0]" x-text="post.icon"></div>
+            <div class="p-5">
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full" :class="post.color" x-text="post.cat"></span>
+              <h3 class="font-bold text-sm text-[#1B1836] mt-3 mb-3 leading-snug" x-text="post.title"></h3>
+              <div class="flex items-center justify-between text-xs text-[#5F5B7A]">
+                <span x-text="post.author"></span>
+                <span x-text="post.time + ' read'"></span>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+      <!-- Recent Posts -->
+      <div class="bg-white rounded-2xl border border-line p-6">
+        <h3 class="font-bold text-[#1B1836] mb-4">Recent Posts</h3>
+        <div class="space-y-4">
+          <div class="flex gap-3 cursor-pointer hover:text-brand-600 transition-colors"><span class="text-xl">📊</span><div><div class="text-sm font-semibold text-[#1B1836] hover:text-brand-600 leading-snug">Economics Scoring Tips for Class 12</div><div class="text-xs text-[#5F5B7A]">20 Nov 2026</div></div></div>
+          <div class="flex gap-3 cursor-pointer hover:text-brand-600 transition-colors"><span class="text-xl">⚛️</span><div><div class="text-sm font-semibold text-[#1B1836] hover:text-brand-600 leading-snug">Physics Formula Sheet: Mechanics &amp; Optics</div><div class="text-xs text-[#5F5B7A]">19 Nov 2026</div></div></div>
+          <div class="flex gap-3 cursor-pointer hover:text-brand-600 transition-colors"><span class="text-xl">🧬</span><div><div class="text-sm font-semibold text-[#1B1836] hover:text-brand-600 leading-snug">Top 10 Biology Diagrams for NEET 2027</div><div class="text-xs text-[#5F5B7A]">17 Nov 2026</div></div></div>
+          <div class="flex gap-3 cursor-pointer hover:text-brand-600 transition-colors"><span class="text-xl">📝</span><div><div class="text-sm font-semibold text-[#1B1836] hover:text-brand-600 leading-snug">How Live Doubt Sessions Improve Learning</div><div class="text-xs text-[#5F5B7A]">15 Nov 2026</div></div></div>
+        </div>
+      </div>
+      <!-- Categories -->
+      <div class="bg-white rounded-2xl border border-line p-6">
+        <h3 class="font-bold text-[#1B1836] mb-4">Categories</h3>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center py-2 border-b border-line cursor-pointer hover:text-brand-600 transition-colors"><span class="text-sm font-medium">Exam Preparation</span><span class="text-xs bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full">24</span></div>
+          <div class="flex justify-between items-center py-2 border-b border-line cursor-pointer hover:text-brand-600 transition-colors"><span class="text-sm font-medium">Study Tips</span><span class="text-xs bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full">18</span></div>
+          <div class="flex justify-between items-center py-2 border-b border-line cursor-pointer hover:text-brand-600 transition-colors"><span class="text-sm font-medium">Subject Guides</span><span class="text-xs bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full">31</span></div>
+          <div class="flex justify-between items-center py-2 border-b border-line cursor-pointer hover:text-brand-600 transition-colors"><span class="text-sm font-medium">For Parents</span><span class="text-xs bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full">12</span></div>
+          <div class="flex justify-between items-center py-2 cursor-pointer hover:text-brand-600 transition-colors"><span class="text-sm font-medium">For Tutors</span><span class="text-xs bg-brand-50 text-brand-700 font-bold px-2 py-0.5 rounded-full">9</span></div>
+        </div>
+      </div>
+      <!-- CTA -->
+      <div class="bg-brand-600 rounded-2xl p-6 text-white text-center">
+        <div class="text-3xl mb-3">🎓</div>
+        <h3 class="font-bold mb-2">Start Learning Today</h3>
+        <p class="text-brand-100 text-sm mb-5">Connect with expert tutors and solve your doubts live.</p>
+        <a href="tutors.html" class="block w-full bg-white text-brand-700 font-bold py-3 rounded-xl hover:bg-brand-50 transition-colors text-sm">Find a Tutor →</a>
+      </div>
+      <!-- Tags -->
+      <div class="bg-white rounded-2xl border border-line p-6">
+        <h3 class="font-bold text-[#1B1836] mb-4">Popular Tags</h3>
+        <div class="flex flex-wrap gap-2">
+          <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-brand-100">Class 10</span>
+          <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-brand-100">Board Exams</span>
+          <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-brand-100">NEET</span>
+          <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-brand-100">IIT JEE</span>
+          <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-brand-100">Mathematics</span>
+          <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-brand-100">Physics</span>
+          <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-brand-100">Study Tips</span>
+          <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-brand-100">Home Tuition</span>
+          <span class="text-xs bg-brand-50 text-brand-700 font-semibold px-2.5 py-1.5 rounded-full cursor-pointer hover:bg-brand-100">CBSE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+</body>
+</html>
